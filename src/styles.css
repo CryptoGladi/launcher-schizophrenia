@@ -1,11 +1,13 @@
 :root {
-  background-color: #4C566A;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: #4C566A;
 }
 
 .center {
@@ -18,9 +20,6 @@
   width: 35%;
   height: 80px;
   font-size: 40px;
-  border-radius: 10px;
-  color: rgb(212, 221, 229);
-  background-color: initial;
-  border-color: rgb(127, 120, 110);
-  background-image: none;
+  background-color: #3B4252;
+  border: #434C5E;
 }
