@@ -20,17 +20,9 @@ color-eyre = "0.6.2"
 thiserror = "1.0.40"
 sysinfo = "0.28.4"
 bytesize = "1.2.0"
+reqwest = "0.11.17"
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem
 # DO NOT REMOVE!!
 custom-protocol = ["tauri/custom-protocol"]
-
-[profile.release]
-opt-level = 3
-lto = "fat"
-overflow-checks = false
-strip = false
-debug-assertions = false
-panic = "abort"
-codegen-units = 1

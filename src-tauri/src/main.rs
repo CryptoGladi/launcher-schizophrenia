@@ -10,7 +10,7 @@ use log::*;
 fn my_custom_command() {
     let game = game::Game::default();
 
-    info!("{:?}", game);
+    info!("{:?}", game.run());
 }
 
 fn main() -> Result<()> {
