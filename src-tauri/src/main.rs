@@ -6,13 +6,6 @@ mod game;
 use color_eyre::eyre::Result;
 use log::*;
 
-#[tauri::command]
-fn my_custom_command() {
-    let game = game::Game::default();
-
-    info!("{:?}", game.run());
-}
-
 fn main() -> Result<()> {
     color_eyre::install()?;
     simple_logger::SimpleLogger::default()
@@ -22,7 +15,7 @@ fn main() -> Result<()> {
     info!("running done!");
 
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![my_custom_command])
+        .invoke_handler(tauri::generate_handler![game::command::run_game, game::command::game_is_installed])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 

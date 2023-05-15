@@ -10,7 +10,11 @@
       const invoke = window.__TAURI__.invoke
 
       function startGame() {
-        invoke("my_custom_command")
+        if (invoke("game_is_installed") == false) {
+          
+        }
+
+        //invoke("run_game")
       }
     </script>
   </head>
