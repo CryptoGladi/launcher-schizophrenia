@@ -11,8 +11,17 @@
 
       function startGame() {
         if (invoke("game_is_installed") == false) {
-          
+          console.log("3333");
+          invoke("install_game").then(() =>
+            console.log('Completed!')
+            )
+            console.log("33332222");
         }
+        console.log("3333");
+          invoke("install_game").then(() =>
+            console.log('Completed!')
+            )
+            console.log("33332222");
 
         //invoke("run_game")
       }

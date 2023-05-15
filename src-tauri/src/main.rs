@@ -15,7 +15,11 @@ fn main() -> Result<()> {
     info!("running done!");
 
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![game::command::run_game, game::command::game_is_installed])
+        .invoke_handler(tauri::generate_handler![
+            game::command::run_game,
+            game::command::game_is_installed,
+            game::command::install_game
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 

@@ -1,9 +1,10 @@
 use std::fs::read_dir;
 
+use self::downloader::Downloader;
 use bytesize::ByteSize;
-use sysinfo::{System, SystemExt};
 use chksum::prelude::*;
-use anyhow::Result;
+use downloader::Progress::*;
+use sysinfo::{System, SystemExt};
 
 pub mod command;
 mod downloader;
@@ -44,5 +45,22 @@ impl Game {
 
         let digest = read_dir(path)?.chksum(downloader::CHECKSUM.1)?;
         Ok(format!("{:x}", digest) == downloader::CHECKSUM.0)
+    }
+
+    pub async fn download_game(&self) -> anyhow::Result<()> {
+        let mut dowloader = Downloader::default();
+
+        dowloader.set_callback(|progress| {
+            match progress {
+                Downloading(e) => log::info!("downloading: {}", e),
+                Decompressing => log::warn!("decompess"),
+            }
+
+            // TODO https://github.com/tauri-apps/tauri-plugin-upload/blob/dev/src/lib.rs#L73
+        });
+
+        dowloader.download().await?;
+
+        Ok(())
     }
 }
