@@ -1,8 +1,7 @@
-use std::fs::read_dir;
-
-use self::downloader::Downloader;
+use self::downloader::{Downloader, Progress};
 use bytesize::ByteSize;
 use downloader::Progress::*;
+use log::debug;
 use sysinfo::{System, SystemExt};
 
 pub mod command;
@@ -31,7 +30,7 @@ impl Default for Game {
 
 impl Game {
     pub fn run(&self) {
-        let flags = flags::get_flags(&self);
+        let flags = flags::get_flags(self);
         log::error!("flags: {}", flags);
     }
 
@@ -45,22 +44,12 @@ impl Game {
         Ok(true)
     }
 
-    pub async fn download_game(&self) -> anyhow::Result<()> {
+    pub async fn download_game<'a>(&self, callback: impl FnMut(Progress) + Send + Sync + 'a) -> anyhow::Result<()> {
         let mut dowloader = Downloader::default();
 
-        let mut ii = 0;
-        dowloader.set_callback(move |progress| {
-            match progress {
-                Downloading(i) => log::warn!("downloading: MB: {}", i / bytesize::MB),
-                Decompressing { name, size, len_files } => {
-                    ii += 1;
-                    log::warn!("decompessing: {}/{}. name: {}; size: {}", ii, len_files, name, ByteSize::b(size).to_string());
-                }
-            }
-
-            // TODO https://github.com/tauri-apps/tauri-plugin-upload/blob/dev/src/lib.rs#L73
-        });
-
+        debug!("11");
+        dowloader.set_callback(callback);
+        debug!("11");
         dowloader.download().await?;
 
         Ok(())

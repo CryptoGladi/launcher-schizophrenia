@@ -9,7 +9,7 @@ use log::*;
 fn main() -> Result<()> {
     color_eyre::install()?;
     simple_logger::SimpleLogger::default()
-        .with_level(LevelFilter::Info)
+        .with_level(LevelFilter::Debug)
         .init()
         .unwrap();
     info!("running done!");

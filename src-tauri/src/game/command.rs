@@ -1,5 +1,12 @@
 use crate::game::Game;
 use log::*;
+use tauri::Window;
+use crate::game::downloader::Progress::*;
+
+pub mod event {
+    pub const PROGRESS_DOWLOADING: &str = "progress-downloading";
+    pub const PROGRESS_DECOMPESSING: &str = "progress-decompressing";
+}
 
 #[tauri::command]
 pub async fn run_game() {
@@ -18,15 +25,17 @@ pub fn game_is_installed() -> bool {
 }
 
 #[tauri::command]
-pub async fn install_game() {
+pub async fn install_game(window: Window) {
     let game = Game::default();
+
     info!("run install game");
 
-    if game_is_installed() {
-        return ();
-    }
-
-    game.download_game().await.unwrap();
+    game.download_game(move |progress| {
+        match progress {
+            Downloading(e) => window.emit(event::PROGRESS_DOWLOADING, e).unwrap(),
+            Decompressing(e) => window.emit(event::PROGRESS_DECOMPESSING, e).unwrap()
+        }        
+    }).await.unwrap();
 
     info!("done download game!");
 }

@@ -8,20 +8,22 @@
 
     <script>
       const invoke = window.__TAURI__.invoke
+      const listen = window.__TAURI__.event.listen
 
       function startGame() {
-        if (invoke("game_is_installed") == false) {
-          console.log("3333");
-          invoke("install_game").then(() =>
-            console.log('Completed!')
-            )
-            console.log("33332222");
-        }
-        console.log("3333");
-          invoke("install_game").then(() =>
-            console.log('Completed!')
-            )
-            console.log("33332222");
+        console.log('starting game...')
+        
+        invoke("install_game").then(() =>
+          console.log('Completed install game!')
+        )
+
+        listen(
+          'progress-decompressing',
+          ({event, payload}) => {
+            document.getElementById("p1").innerHTML = payload.name;
+          }
+        );
+
 
         //invoke("run_game")
       }
@@ -29,6 +31,7 @@
   </head>
 
   <body>
+    <p id="p1">Hello World!</p>
     <div>
       <img src="assets/logo.png" class="center">
     </div>
