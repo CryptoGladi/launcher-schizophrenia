@@ -1,5 +1,3 @@
-use bytesize::ByteSize;
-
 use super::Game;
 
 pub fn get_flags(game: &Game) -> String {

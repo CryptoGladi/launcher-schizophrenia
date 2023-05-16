@@ -2,7 +2,6 @@ use std::fs::read_dir;
 
 use self::downloader::Downloader;
 use bytesize::ByteSize;
-use chksum::prelude::*;
 use downloader::Progress::*;
 use sysinfo::{System, SystemExt};
 
@@ -43,8 +42,7 @@ impl Game {
             return Ok(false);
         }
 
-        let digest = read_dir(path)?.chksum(downloader::CHECKSUM.1)?;
-        Ok(format!("{:x}", digest) == downloader::CHECKSUM.0)
+        Ok(downloader::CHECKSUM_FOR_UNPACKED_ARCHIVE.check(&mut read_dir(path)?)?)
     }
 
     pub async fn download_game(&self) -> anyhow::Result<()> {
@@ -52,7 +50,7 @@ impl Game {
 
         dowloader.set_callback(|progress| {
             match progress {
-                Downloading(e) => log::info!("downloading: {}", e),
+                Downloading(e) => {},
                 Decompressing => log::warn!("decompess"),
             }
 
