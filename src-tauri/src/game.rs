@@ -42,16 +42,20 @@ impl Game {
             return Ok(false);
         }
 
-        Ok(downloader::CHECKSUM_FOR_UNPACKED_ARCHIVE.check(&mut read_dir(path)?)?)
+        Ok(true)
     }
 
     pub async fn download_game(&self) -> anyhow::Result<()> {
         let mut dowloader = Downloader::default();
 
-        dowloader.set_callback(|progress| {
+        let mut ii = 0;
+        dowloader.set_callback(move |progress| {
             match progress {
-                Downloading(e) => {},
-                Decompressing => log::warn!("decompess"),
+                Downloading(i) => log::warn!("downloading: MB: {}", i / bytesize::MB),
+                Decompressing { name, size, len_files } => {
+                    ii += 1;
+                    log::warn!("decompessing: {}/{}. name: {}; size: {}", ii, len_files, name, ByteSize::b(size).to_string());
+                }
             }
 
             // TODO https://github.com/tauri-apps/tauri-plugin-upload/blob/dev/src/lib.rs#L73

@@ -21,12 +21,12 @@ pub fn game_is_installed() -> bool {
 pub async fn install_game() {
     let game = Game::default();
     info!("run install game");
-    
+
     if game_is_installed() {
         return ();
     }
 
     game.download_game().await.unwrap();
-    
+
     info!("done download game!");
 }

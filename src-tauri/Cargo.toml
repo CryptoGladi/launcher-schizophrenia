@@ -23,7 +23,6 @@ reqwest = { version = "0.11", features = ["stream"] }
 chksum = { version = "0.1.0-rc5", default-features = false, features = ["sha2_256"] }
 anyhow = { version = "1", features = ["backtrace"] }
 dirs = "5"
-tempfile = "3"
 futures-util = "0.3.28"
 sevenz-rust = { version = "0.2.10", default-features = false }
 
@@ -40,3 +39,6 @@ panic = "abort"
 
 [dev-dependencies]
 tokio = { version = "1.28.1", features = ["macros"] }
+
+[profile.dev.package."sevenz-rust"]
+opt-level = 3
