@@ -11,16 +11,36 @@
       const listen = window.__TAURI__.event.listen
 
       function startGame() {
+        let status = document.getElementById("status");
+        let button_progress_downloading = document.getElementById("button-progress-downloading");
+        let button_progress_decompressing = document.getElementById("button-progress-decompressing");
+        let button_progress_text = document.getElementById("button-progress-text");
+
         console.log('starting game...')
         
-        invoke("install_game").then(() =>
-          console.log('Completed install game!')
-        )
+        status.style.opacity = 1;
+        invoke("install_game").then(() => {
+          status.style.opacity = 0
+          button_progress_downloading.style.width = `0%`
+          button_progress_decompressing.style.width = '0%'
+          button_progress_text.innerHTML = "Играть"
+        })
 
         listen(
           'progress-decompressing',
           ({event, payload}) => {
-            document.getElementById("p1").innerHTML = payload.name;
+            status.innerHTML = "Распаковка файлов: " + payload.len_done_files + "/" + payload.total_files;
+            let percent_done = (payload.len_done_files * 100) / payload.total_files;
+
+            button_progress_decompressing.style.width = `${percent_done}%`;
+          }
+        );
+
+        listen(
+          'progress-downloading',
+          ({event, payload}) => {
+            status.innerHTML = "Загрузка архива...";
+            button_progress_downloading.style.width = `${payload.percent_done}%`;
           }
         );
 
@@ -31,20 +51,26 @@
   </head>
 
   <body>
-    <p id="p1">Hello World!</p>
     <div>
       <img src="assets/logo.png" class="center">
     </div>
 
     <div>
-      <button type="button" class="btn btn-primary btn-lg center big-button" style="margin-top: 145px;" onclick="startGame()">Играть</button>
+      <button type="button" class="btn btn-primary btn-lg center big-button" style="margin-top: 145px;" onclick="startGame()">
+        <span class="button__text" id="button-progress-text">Установить</span>
+        <div id="button-progress-downloading" class="button__progress" style="background: #8FBCBB; opacity: 0.2;"></div>
+        <div id="button-progress-decompressing" class="button__progress" style="background: #88C0D0; opacity: 0.2;"></div>
+      </button>
+
+      
+      <p id="status" class="center_text" style="opacity: 0;">Статус игры</p>
     </div>
 
-    <div style="float: left; margin-top: 170px; margin-left: 10px;">
+    <div style="float: left; margin-top: 146px; margin-left: 10px;">
       <p style="opacity: 0.65; color: rgb(212, 221, 229);">Версия 1.0</p>
     </div>
     
-    <div style="float: right; margin-top: 170px; height: auto; width: 40px; margin-right: 10px;">
+    <div style="float: right; margin-top: 140px; height: auto; width: 40px; margin-right: 10px;">
       <img src="assets/discord-icon.svg" style='height: 100%; width: 100%; object-fit: contain'> 
     </div>
   </body>

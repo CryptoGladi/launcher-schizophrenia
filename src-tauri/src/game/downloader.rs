@@ -22,7 +22,7 @@ impl<'a> Checksum<'a> {
     }
 }
 
-pub const URL: &str = "https://s80vlx.storage.yandex.net/rdisk/0d7c397d540254543b226d62a218ede08546a00d43648de9e2ac680d58714d62/6463f557/ebcgY3rvPKsNXoZfg1J4bWcoR8eCr1GwC2HiwemnhJnu936IH-HgYtxh8er7OhS0GAUGb3bTTLBtvGsf7Cgdwg==?uid=0&filename=minecra.7z&disposition=attachment&hash=ccmjnRHhAR8Dh18tCkeQX0GZNl0Xjin5yMnWf2A4UvIQ/AqL6mcvncq03KDH6RkUq/J6bpmRyOJonT3VoXnDag%3D%3D&limit=0&content_type=application%2Fx-7z-compressed&owner_uid=450618812&fsize=137049779&hid=b54a00c54b0ede2423cd28f37c630c71&media_type=compressed&tknv=v2&rtoken=3Emgxb4u1cPh&force_default=no&ycrid=na-cc5451d59196aea1b5e5c34bedced456-downloader20f&ts=5fbd63e56c3c0&s=3d21ffdc4937b2fe527ef67484f19e13f1b989868b9392a79988256295e2cebf&pb=U2FsdGVkX1_XBAEYSrw3vb6LEE1WoKG0OURNUdg5PDwm8eKDPJA-XJcVxTBkFd_eEjvJ2p7ua824QXu-3Iycrfngs9jt_aGFA3Wl_fRT1hA";
+pub const URL: &str = "https://s596sas.storage.yandex.net/rdisk/6fc021e9839d06bca655234c6283d628a67e237b328e5ffb5aacbf94da367e11/6464e21f/ebcgY3rvPKsNXoZfg1J4bWcoR8eCr1GwC2HiwemnhJnu936IH-HgYtxh8er7OhS0GAUGb3bTTLBtvGsf7Cgdwg==?uid=0&filename=minecra.7z&disposition=attachment&hash=ccmjnRHhAR8Dh18tCkeQX0GZNl0Xjin5yMnWf2A4UvIQ/AqL6mcvncq03KDH6RkUq/J6bpmRyOJonT3VoXnDag%3D%3D&limit=0&content_type=application%2Fx-7z-compressed&owner_uid=450618812&fsize=137049779&hid=b54a00c54b0ede2423cd28f37c630c71&media_type=compressed&tknv=v2&rtoken=ihyYXTUixZim&force_default=no&ycrid=na-0650d363322453dbca9b3d3a1957f260-downloader10h&ts=5fbe45b5585c0&s=92f5e628143a98489e9d294bae66d8893ba1606b47debc2ec4add65f936649dc&pb=U2FsdGVkX1898TdjAGwPA5M8r5xmQLwyptYEDJa7rxztjzFUemyu7cSloER-z3HVRyBpZNoQQRxpM_P5l5OavMCPMG__GzPJTnxmpwjC0Io";
 
 pub const CHECKSUM_FOR_ARCHIVE: Checksum = Checksum {
     hash: "1eb21cca15e2776a1d7c90bbe592ae840d4d91b0057788bce4e5b11723838dec",
@@ -37,12 +37,18 @@ const PATH: &str = "mine-schizophrenia";
 pub struct DecompressStream<'a> {
     name: &'a str,
     size: u64,
-    len_files: usize,
+    len_done_files: usize,
+    total_files: usize,
+}
+
+#[derive(Clone, Debug, Serialize)]
+pub struct DownloadStream {
+    percent_done: u64,
 }
 
 #[derive(Clone, Debug, Serialize)]
 pub enum Progress<'a> {
-    Downloading(u64),
+    Downloading(DownloadStream),
     Decompressing(DecompressStream<'a>),
 }
 
@@ -86,11 +92,13 @@ impl<'a> Downloader<'a> {
             .files
             .len();
 
+        let mut len_done_files = 0;
         sevenz_rust::decompress_file_with_extract_fn(
             archive_path,
             self.dest.clone(),
             |entry, reader, dest| {
-                (self.callback)(Progress::Decompressing( DecompressStream { name: entry.name(), size: entry.size(), len_files }));
+                (self.callback)(Progress::Decompressing( DecompressStream { name: entry.name(), size: entry.size(), total_files: len_files, len_done_files}));
+                len_done_files += 1;
                 sevenz_rust::default_entry_extract_fn(entry, reader, dest)
             },
         )?;
@@ -110,6 +118,11 @@ impl<'a> Downloader<'a> {
         }
 
         let res = self.client.get(self.url.clone()).send().await?;
+
+        if !res.status().is_success() {
+            anyhow::bail!("response to download_archive. status: {}", res.status())
+        }
+
         let total_size = res.content_length().unwrap();
         let mut file = OpenOptions::new()
             .write(true)
@@ -126,7 +139,7 @@ impl<'a> Downloader<'a> {
             let new = min(downloaded + (chunk.len() as u64), total_size);
             downloaded = new;
 
-            (self.callback)(Progress::Downloading(downloaded));
+            (self.callback)(Progress::Downloading(DownloadStream { percent_done: (downloaded * 100) / total_size }));
         }
 
         Ok((file, path))

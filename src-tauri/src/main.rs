@@ -2,6 +2,7 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 mod game;
+pub mod exit_unwrap;
 
 use color_eyre::eyre::Result;
 use log::*;

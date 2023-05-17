@@ -22,4 +22,23 @@ body {
   font-size: 40px;
   background-color: #3B4252;
   border: #434C5E;
+  position: relative;
+  cursor: pointer;
+}
+
+.center_text {
+  position: realtive;
+  padding: 1em 0;
+  margin: 0;
+  text-align:center;
+}
+
+.button__progress {
+  position: absolute;
+  height: 100%;
+  width: 0%;
+  top: 0;
+  left: 0;
+  transition: width 0.3s;
+  border-radius: var(--bs-btn-border-radius);
 }

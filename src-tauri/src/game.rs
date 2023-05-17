@@ -47,9 +47,7 @@ impl Game {
     pub async fn download_game<'a>(&self, callback: impl FnMut(Progress) + Send + Sync + 'a) -> anyhow::Result<()> {
         let mut dowloader = Downloader::default();
 
-        debug!("11");
         dowloader.set_callback(callback);
-        debug!("11");
         dowloader.download().await?;
 
         Ok(())
