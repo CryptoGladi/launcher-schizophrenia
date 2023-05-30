@@ -1,6 +1,6 @@
 use crate::game::Game;
 use log::*;
-use tauri::Window;
+use tauri::{Window, Runtime};
 use crate::game::downloader::Progress::*;
 use crate::exit_unwrap::ExitUnwrap;
 
@@ -10,8 +10,12 @@ pub mod event {
 }
 
 #[tauri::command]
-pub async fn run_game() {
-    let game = Game::default();
+pub async fn run_game(nickname: String) {
+    info!("running game: nickname: {}", nickname);
+    let game = Game {
+        username: nickname,
+        ..Default::default()
+    };
 
     info!("{:?}", game.run());
 }

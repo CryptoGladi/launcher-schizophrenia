@@ -42,3 +42,9 @@ body {
   transition: width 0.3s;
   border-radius: var(--bs-btn-border-radius);
 }
+
+.input-nord {
+  background: #2E3440;
+  color: rgb(222, 223, 225);
+  border: rgb(61, 67, 77);
+}

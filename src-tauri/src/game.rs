@@ -1,3 +1,5 @@
+//! Главный модуль, который отвечает за запуск, настройку игры
+
 use self::downloader::{Downloader, Progress};
 use bytesize::ByteSize;
 use downloader::Progress::*;
@@ -8,6 +10,7 @@ pub mod command;
 mod downloader;
 mod flags;
 
+/// Главная структура для управления процессом игры
 #[derive(Debug)]
 pub struct Game {
     min_use_memory: ByteSize,
@@ -29,22 +32,32 @@ impl Default for Game {
 }
 
 impl Game {
-    pub fn run(&self) {
+    /// Запустить игру
+    ///
+    /// # Внимание
+    ///
+    /// Для успешного запуска нужно сперва установать игру
+    pub fn run(&self) -> anyhow::Result<()> {
         let flags = flags::get_flags(self);
         log::error!("flags: {}", flags);
+
+        let args = vec![];
+        let options = run_script::ScriptOptions::new();
+        run_script::spawn(&flags, &args, &options)?;
+
+        Ok(())
     }
 
     pub fn game_is_installed(&self) -> anyhow::Result<bool> {
-        let path = downloader::get_path();
+        let path = downloader::get_path().join("Шизофрения Ретёрн.jar");
 
-        if !path.is_dir() {
-            return Ok(false);
-        }
-
-        Ok(true)
+        Ok(path.is_file())
     }
 
-    pub async fn download_game<'a>(&self, callback: impl FnMut(Progress) + Send + Sync + 'a) -> anyhow::Result<()> {
+    pub async fn download_game<'a>(
+        &self,
+        callback: impl FnMut(Progress) + Send + Sync + 'a,
+    ) -> anyhow::Result<()> {
         let mut dowloader = Downloader::default();
 
         dowloader.set_callback(callback);

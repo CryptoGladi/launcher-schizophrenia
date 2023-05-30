@@ -1,3 +1,4 @@
+use anyhow::Context;
 use chksum::prelude::*;
 use futures_util::StreamExt;
 use reqwest::{Client, Url};
@@ -9,7 +10,6 @@ use std::{
     io::Write,
     path::PathBuf,
 };
-use anyhow::Context;
 
 pub struct Checksum<'a> {
     hash: &'a str,
@@ -22,7 +22,7 @@ impl<'a> Checksum<'a> {
     }
 }
 
-pub const URL: &str = "https://s596sas.storage.yandex.net/rdisk/6fc021e9839d06bca655234c6283d628a67e237b328e5ffb5aacbf94da367e11/6464e21f/ebcgY3rvPKsNXoZfg1J4bWcoR8eCr1GwC2HiwemnhJnu936IH-HgYtxh8er7OhS0GAUGb3bTTLBtvGsf7Cgdwg==?uid=0&filename=minecra.7z&disposition=attachment&hash=ccmjnRHhAR8Dh18tCkeQX0GZNl0Xjin5yMnWf2A4UvIQ/AqL6mcvncq03KDH6RkUq/J6bpmRyOJonT3VoXnDag%3D%3D&limit=0&content_type=application%2Fx-7z-compressed&owner_uid=450618812&fsize=137049779&hid=b54a00c54b0ede2423cd28f37c630c71&media_type=compressed&tknv=v2&rtoken=ihyYXTUixZim&force_default=no&ycrid=na-0650d363322453dbca9b3d3a1957f260-downloader10h&ts=5fbe45b5585c0&s=92f5e628143a98489e9d294bae66d8893ba1606b47debc2ec4add65f936649dc&pb=U2FsdGVkX1898TdjAGwPA5M8r5xmQLwyptYEDJa7rxztjzFUemyu7cSloER-z3HVRyBpZNoQQRxpM_P5l5OavMCPMG__GzPJTnxmpwjC0Io";
+pub const URL: &str = "https://s80vlx.storage.yandex.net/rdisk/3d5918d35917f12a39c42c2c1cd2bc736c3e483d58718f801a55561ff0e2a685/64654533/ebcgY3rvPKsNXoZfg1J4bWcoR8eCr1GwC2HiwemnhJnu936IH-HgYtxh8er7OhS0GAUGb3bTTLBtvGsf7Cgdwg==?uid=0&filename=minecra.7z&disposition=attachment&hash=ccmjnRHhAR8Dh18tCkeQX0GZNl0Xjin5yMnWf2A4UvIQ/AqL6mcvncq03KDH6RkUq/J6bpmRyOJonT3VoXnDag%3D%3D&limit=0&content_type=application%2Fx-7z-compressed&owner_uid=450618812&fsize=137049779&hid=b54a00c54b0ede2423cd28f37c630c71&media_type=compressed&tknv=v2&rtoken=6VtviYbWbrdx&force_default=no&ycrid=na-4c3189f8ce8f5f88c2aa4e2d6fc7b3b8-downloader9f&ts=5fbea432572c0&s=775c79aa816bfbdadb1a1c5d70feb1b352d233bbd1968aa341355ec99474de31&pb=U2FsdGVkX1_C7nRP4che4iSUilL1rrNZ6lURKczxu65xJGRSe4yhKyq_eZsF1MDBg4uVDMsF_H72ErMk8NJhbfXR6nD3bUf0AHndr9wOou8";
 
 pub const CHECKSUM_FOR_ARCHIVE: Checksum = Checksum {
     hash: "1eb21cca15e2776a1d7c90bbe592ae840d4d91b0057788bce4e5b11723838dec",
@@ -76,7 +76,10 @@ impl<'a> Default for Downloader<'a> {
 
 impl<'a> Downloader<'a> {
     pub async fn download(&mut self) -> anyhow::Result<()> {
-        let (mut archive, archive_path) = self.download_archive().await.context("downloading archive")?;
+        let (mut archive, archive_path) = self
+            .download_archive()
+            .await
+            .context("downloading archive")?;
 
         if CHECKSUM_FOR_ARCHIVE.check(&mut archive)? {
             anyhow::bail!("invalid checksum archive");
@@ -88,7 +91,8 @@ impl<'a> Downloader<'a> {
 
         fs::create_dir(&self.dest)?;
 
-        let len_files = sevenz_rust::Archive::read(&mut File::open(&archive_path)?, 1024, b"").context("reading archive")?
+        let len_files = sevenz_rust::Archive::read(&mut File::open(&archive_path)?, 1024, b"")
+            .context("reading archive")?
             .files
             .len();
 
@@ -97,7 +101,12 @@ impl<'a> Downloader<'a> {
             archive_path,
             self.dest.clone(),
             |entry, reader, dest| {
-                (self.callback)(Progress::Decompressing( DecompressStream { name: entry.name(), size: entry.size(), total_files: len_files, len_done_files}));
+                (self.callback)(Progress::Decompressing(DecompressStream {
+                    name: entry.name(),
+                    size: entry.size(),
+                    total_files: len_files,
+                    len_done_files,
+                }));
                 len_done_files += 1;
                 sevenz_rust::default_entry_extract_fn(entry, reader, dest)
             },
@@ -139,7 +148,9 @@ impl<'a> Downloader<'a> {
             let new = min(downloaded + (chunk.len() as u64), total_size);
             downloaded = new;
 
-            (self.callback)(Progress::Downloading(DownloadStream { percent_done: (downloaded * 100) / total_size }));
+            (self.callback)(Progress::Downloading(DownloadStream {
+                percent_done: (downloaded * 100) / total_size,
+            }));
         }
 
         Ok((file, path))
