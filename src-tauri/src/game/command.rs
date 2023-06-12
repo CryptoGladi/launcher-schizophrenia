@@ -1,8 +1,8 @@
+use crate::exit_unwrap::ExitUnwrap;
+use crate::game::downloader::Progress::*;
 use crate::game::Game;
 use log::*;
-use tauri::{Window, Runtime};
-use crate::game::downloader::Progress::*;
-use crate::exit_unwrap::ExitUnwrap;
+use tauri::Window;
 
 pub mod event {
     pub const PROGRESS_DOWLOADING: &str = "progress-downloading";
@@ -35,12 +35,12 @@ pub async fn install_game(window: Window) {
 
     info!("run install game");
 
-    game.download_game(move |progress| {
-        match progress {
-            Downloading(e) => window.emit(event::PROGRESS_DOWLOADING, e).exit_unwrap(),
-            Decompressing(e) => window.emit(event::PROGRESS_DECOMPESSING, e).exit_unwrap(),
-        }        
-    }).await.exit_unwrap();
+    game.download_game(move |progress| match progress {
+        Downloading(e) => window.emit(event::PROGRESS_DOWLOADING, e).exit_unwrap(),
+        Decompressing(e) => window.emit(event::PROGRESS_DECOMPESSING, e).exit_unwrap(),
+    })
+    .await
+    .exit_unwrap();
 
     info!("done download game!");
 }

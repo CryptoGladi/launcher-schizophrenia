@@ -1,3 +1,5 @@
+//! Изменённый 'unwrap()', чтобы программа завершела работу при ошибки в 'async fn'
+
 pub trait ExitUnwrap<T> {
     fn exit_unwrap(self) -> T;
 }

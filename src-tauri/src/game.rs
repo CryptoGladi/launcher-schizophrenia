@@ -2,8 +2,6 @@
 
 use self::downloader::{Downloader, Progress};
 use bytesize::ByteSize;
-use downloader::Progress::*;
-use log::debug;
 use sysinfo::{System, SystemExt};
 
 pub mod command;
