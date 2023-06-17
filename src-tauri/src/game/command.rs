@@ -33,7 +33,6 @@ pub async fn run_game(window: Window, nickname: String) {
 
 #[tauri::command]
 pub fn game_is_installed() -> bool {
-    return true;
     let game = Game::default();
     let is_installed = game.game_is_installed().exit_unwrap();
 

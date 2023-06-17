@@ -18,12 +18,15 @@
       let button_progress_decompressing = document.getElementById("button-progress-decompressing");
       let button_progress_text = document.getElementById("button-progress-text");
       let input_nickname = document.getElementById("input-nickname");
+      let button_start_game = document.getElementById("button-start-game");
+      // TODO Сделать отключение кнопки!
 
       invoke("game_is_installed").then((is_installed) => {
         console.log("lll: " + is_installed)
         if (is_installed == true) {
           console.log('starting game...')
           button_progress_text.innerHTML = "Играть"
+          invoke("config_save", {configForSave: {nickname: input_nickname.value}})
           invoke("run_game", {nickname: input_nickname.value})
         }
         else {
@@ -67,7 +70,7 @@
 
   <div>
     <button type="button" class="btn btn-primary btn-lg center big-button" style="margin-top: 145px;"
-      onclick="startGame()">
+      onclick="startGame()" id="button-start-game">
       <span class="button__text" id="button-progress-text">Установить</span>
       <div id="button-progress-downloading" class="button__progress" style="background: #8FBCBB; opacity: 0.2;"></div>
       <div id="button-progress-decompressing" class="button__progress" style="background: #88C0D0; opacity: 0.2;"></div>

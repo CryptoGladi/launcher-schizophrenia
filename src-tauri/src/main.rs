@@ -5,6 +5,7 @@ pub mod command;
 pub mod config;
 pub mod exit_unwrap;
 mod game;
+pub mod path;
 
 use color_eyre::eyre::Result;
 use log::*;

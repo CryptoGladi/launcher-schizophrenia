@@ -2,12 +2,11 @@ use serde::{Deserialize, Serialize};
 use std::{
     fs::{remove_file, OpenOptions},
     io::Write,
-    path::PathBuf,
+    path::{self, PathBuf},
 };
 
 pub mod command;
 
-const PATH: &str = "mine-schizophrenia";
 const FILENAME: &str = "settings_launcher.json";
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -31,7 +30,7 @@ impl Config {
 
         let json = serde_json::to_string_pretty(&self)?;
 
-        std::fs::create_dir_all(dirs::config_local_dir().unwrap().join(PATH))?;
+        std::fs::create_dir_all(crate::path::get_path_to_folder())?;
         let mut file = OpenOptions::new()
             .create(true)
             .write(true)
@@ -43,7 +42,7 @@ impl Config {
     }
 
     pub fn get_path() -> PathBuf {
-        dirs::config_local_dir().unwrap().join(PATH).join(FILENAME)
+        crate::path::get_path_to_folder().join(FILENAME)
     }
 
     pub fn load() -> anyhow::Result<Config> {
@@ -55,4 +54,3 @@ impl Config {
         Ok(serde_json::from_str(&raw_json)?)
     }
 }
-

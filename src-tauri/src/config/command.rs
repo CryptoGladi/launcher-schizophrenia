@@ -1,6 +1,5 @@
-use crate::exit_unwrap::ExitUnwrap;
-
 use super::Config;
+use crate::exit_unwrap::ExitUnwrap;
 
 #[tauri::command]
 pub fn config_save(config_for_save: Config) {

@@ -2,7 +2,6 @@
 
 use self::downloader::{Downloader, Progress};
 use bytesize::ByteSize;
-use sysinfo::{System, SystemExt};
 
 pub mod command;
 mod downloader;
@@ -18,12 +17,9 @@ pub struct Game {
 
 impl Default for Game {
     fn default() -> Self {
-        let system_info = System::new_all();
-        let max_use_memory = ByteSize::b(system_info.total_memory() / 2);
-
         Self {
             min_use_memory: ByteSize::gib(1),
-            max_use_memory,
+            max_use_memory: ByteSize::gib(4),
             username: "test_player".to_string(),
         }
     }
@@ -47,7 +43,7 @@ impl Game {
     }
 
     pub fn game_is_installed(&self) -> anyhow::Result<bool> {
-        let path = downloader::get_path().join("Шизофрения Ретёрн.jar");
+        let path = crate::path::get_path_to_folder().join("Шизофрения Ретёрн.jar");
 
         Ok(path.is_file())
     }
