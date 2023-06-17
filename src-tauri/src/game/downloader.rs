@@ -23,15 +23,12 @@ impl<'a> Checksum<'a> {
 }
 
 pub const URL: &str = "https://s80vlx.storage.yandex.net/rdisk/3d5918d35917f12a39c42c2c1cd2bc736c3e483d58718f801a55561ff0e2a685/64654533/ebcgY3rvPKsNXoZfg1J4bWcoR8eCr1GwC2HiwemnhJnu936IH-HgYtxh8er7OhS0GAUGb3bTTLBtvGsf7Cgdwg==?uid=0&filename=minecra.7z&disposition=attachment&hash=ccmjnRHhAR8Dh18tCkeQX0GZNl0Xjin5yMnWf2A4UvIQ/AqL6mcvncq03KDH6RkUq/J6bpmRyOJonT3VoXnDag%3D%3D&limit=0&content_type=application%2Fx-7z-compressed&owner_uid=450618812&fsize=137049779&hid=b54a00c54b0ede2423cd28f37c630c71&media_type=compressed&tknv=v2&rtoken=6VtviYbWbrdx&force_default=no&ycrid=na-4c3189f8ce8f5f88c2aa4e2d6fc7b3b8-downloader9f&ts=5fbea432572c0&s=775c79aa816bfbdadb1a1c5d70feb1b352d233bbd1968aa341355ec99474de31&pb=U2FsdGVkX1_C7nRP4che4iSUilL1rrNZ6lURKczxu65xJGRSe4yhKyq_eZsF1MDBg4uVDMsF_H72ErMk8NJhbfXR6nD3bUf0AHndr9wOou8";
+const PATH: &str = "mine-schizophrenia";
 
 pub const CHECKSUM_FOR_ARCHIVE: Checksum = Checksum {
     hash: "1eb21cca15e2776a1d7c90bbe592ae840d4d91b0057788bce4e5b11723838dec",
     algorithm: HashAlgorithm::SHA2_256,
 };
-
-// TODO Нужно сделать checksum для АРХИВА и РАСПАКОВАННОЙ ПАПКИ ОТДЕЛЬНО!
-
-const PATH: &str = "mine-schizophrenia";
 
 #[derive(Clone, Debug, Serialize)]
 pub struct DecompressStream<'a> {

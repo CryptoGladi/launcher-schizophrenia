@@ -1,6 +1,7 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+pub mod command;
 pub mod config;
 pub mod exit_unwrap;
 mod game;
@@ -20,7 +21,10 @@ fn main() -> Result<()> {
         .invoke_handler(tauri::generate_handler![
             game::command::run_game,
             game::command::game_is_installed,
-            game::command::install_game
+            game::command::install_game,
+            config::command::config_load,
+            config::command::config_save,
+            command::open_url_discord
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

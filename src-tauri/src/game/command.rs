@@ -2,6 +2,7 @@ use crate::exit_unwrap::ExitUnwrap;
 use crate::game::downloader::Progress::*;
 use crate::game::Game;
 use log::*;
+use tauri::api::dialog::{MessageDialogBuilder, MessageDialogButtons, MessageDialogKind};
 use tauri::Window;
 
 pub mod event {
@@ -10,7 +11,17 @@ pub mod event {
 }
 
 #[tauri::command]
-pub async fn run_game(nickname: String) {
+pub async fn run_game(window: Window, nickname: String) {
+    if nickname.is_empty() {
+        MessageDialogBuilder::new("Вы не указали имя игрока", "Ошибка запуска игры")
+            .buttons(MessageDialogButtons::Ok)
+            .kind(MessageDialogKind::Error)
+            .parent(&window)
+            .show(|_| {});
+
+        return;
+    }
+
     info!("running game: nickname: {}", nickname);
     let game = Game {
         username: nickname,
@@ -22,6 +33,7 @@ pub async fn run_game(nickname: String) {
 
 #[tauri::command]
 pub fn game_is_installed() -> bool {
+    return true;
     let game = Game::default();
     let is_installed = game.game_is_installed().exit_unwrap();
 

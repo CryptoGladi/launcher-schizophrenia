@@ -1,21 +1,24 @@
 use serde::{Deserialize, Serialize};
 use std::{
     fs::{remove_file, OpenOptions},
-    io::{Write},
-    path::{PathBuf}};
+    io::Write,
+    path::PathBuf,
+};
+
+pub mod command;
 
 const PATH: &str = "mine-schizophrenia";
 const FILENAME: &str = "settings_launcher.json";
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Config {
-    pub nickname: String
+    pub nickname: String,
 }
 
 impl Default for Config {
     fn default() -> Self {
         Self {
-            nickname: "".to_string()
+            nickname: "".to_string(),
         }
     }
 }
@@ -27,7 +30,7 @@ impl Config {
         }
 
         let json = serde_json::to_string_pretty(&self)?;
-        
+
         std::fs::create_dir_all(dirs::config_local_dir().unwrap().join(PATH))?;
         let mut file = OpenOptions::new()
             .create(true)
@@ -52,3 +55,4 @@ impl Config {
         Ok(serde_json::from_str(&raw_json)?)
     }
 }
+

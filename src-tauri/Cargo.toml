@@ -11,7 +11,7 @@ edition = "2021"
 tauri-build = { version = "1.2", features = [] }
 
 [dependencies]
-tauri = { version = "1.2", features = ["shell-open"] }
+tauri = { version = "1.2", features = ["dialog", "shell-open"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 log = "0.4"
@@ -27,6 +27,7 @@ futures-util = "0.3"
 sevenz-rust = { version = "0.2", default-features = false }
 lazy_static = "1.4"
 run_script = "0.10"
+open = "4.1.0"
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem
