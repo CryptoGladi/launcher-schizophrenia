@@ -1,6 +1,6 @@
 use crate::exit_unwrap::ExitUnwrap;
 use crate::game::downloader::Progress::*;
-use crate::game::Game;
+use crate::game::GameManager;
 use log::*;
 use tauri::api::dialog::{MessageDialogBuilder, MessageDialogButtons, MessageDialogKind};
 use tauri::Window;
@@ -23,7 +23,7 @@ pub async fn run_game(window: Window, nickname: String) {
     }
 
     info!("running game: nickname: {}", nickname);
-    let game = Game {
+    let game = GameManager {
         username: nickname,
         ..Default::default()
     };
@@ -33,8 +33,8 @@ pub async fn run_game(window: Window, nickname: String) {
 
 #[tauri::command]
 pub fn game_is_installed() -> bool {
-    let game = Game::default();
-    let is_installed = game.game_is_installed().exit_unwrap();
+    let game = GameManager::default();
+    let is_installed = game.is_installed().exit_unwrap();
 
     info!("game is installed?: {}", is_installed);
     is_installed
@@ -42,11 +42,11 @@ pub fn game_is_installed() -> bool {
 
 #[tauri::command]
 pub async fn install_game(window: Window) {
-    let game = Game::default();
+    let game = GameManager::default();
 
     info!("run install game");
 
-    game.download_game(move |progress| match progress {
+    game.download(move |progress| match progress {
         Downloading(e) => window.emit(event::PROGRESS_DOWLOADING, e).exit_unwrap(),
         Decompressing(e) => window.emit(event::PROGRESS_DECOMPESSING, e).exit_unwrap(),
     })

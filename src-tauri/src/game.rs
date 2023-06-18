@@ -9,13 +9,13 @@ mod flags;
 
 /// Главная структура для управления процессом игры
 #[derive(Debug)]
-pub struct Game {
+pub struct GameManager {
     min_use_memory: ByteSize,
     max_use_memory: ByteSize,
     username: String,
 }
 
-impl Default for Game {
+impl Default for GameManager {
     fn default() -> Self {
         Self {
             min_use_memory: ByteSize::gib(1),
@@ -25,7 +25,7 @@ impl Default for Game {
     }
 }
 
-impl Game {
+impl GameManager {
     /// Запустить игру
     ///
     /// # Внимание
@@ -42,13 +42,13 @@ impl Game {
         Ok(())
     }
 
-    pub fn game_is_installed(&self) -> anyhow::Result<bool> {
-        let path = crate::path::get_path_to_folder().join("Шизофрения Ретёрн.jar");
+    pub fn is_installed(&self) -> anyhow::Result<bool> {
+        let path = crate::path::get_config().join("Шизофрения Ретёрн.jar");
 
         Ok(path.is_file())
     }
 
-    pub async fn download_game<'a>(
+    pub async fn download<'a>(
         &self,
         callback: impl FnMut(Progress) + Send + Sync + 'a,
     ) -> anyhow::Result<()> {

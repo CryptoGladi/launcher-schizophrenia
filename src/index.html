@@ -12,6 +12,22 @@
     const invoke = window.__TAURI__.invoke
     const listen = window.__TAURI__.event.listen
 
+    function startLauncher() {
+      let button_progress_text = document.getElementById("button-progress-text");
+      let input_nickname = document.getElementById("input-nickname");
+
+      invoke("game_is_installed").then((is_installed) => {
+        if (is_installed == true)
+          button_progress_text.innerHTML = "Играть";
+        else
+          button_progress_text.innerHTML = "Установить";
+      })
+
+      invoke("config_load").then((config) => {
+        input_nickname.value = config.nickname;
+      })
+    }
+
     function startGame() {
       let status = document.getElementById("status");
       let button_progress_downloading = document.getElementById("button-progress-downloading");
@@ -63,7 +79,7 @@
   </script>
 </head>
 
-<body>
+<body onload="startLauncher()">
   <div>
     <img src="assets/logo.png" class="center">
   </div>

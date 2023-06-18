@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 use std::{
     fs::{remove_file, OpenOptions},
     io::Write,
-    path::{self, PathBuf},
+    path::PathBuf,
 };
 
 pub mod command;
@@ -30,7 +30,7 @@ impl Config {
 
         let json = serde_json::to_string_pretty(&self)?;
 
-        std::fs::create_dir_all(crate::path::get_path_to_folder())?;
+        std::fs::create_dir_all(crate::path::get_config())?;
         let mut file = OpenOptions::new()
             .create(true)
             .write(true)
@@ -42,7 +42,7 @@ impl Config {
     }
 
     pub fn get_path() -> PathBuf {
-        crate::path::get_path_to_folder().join(FILENAME)
+        crate::path::get_config().join(FILENAME)
     }
 
     pub fn load() -> anyhow::Result<Config> {
