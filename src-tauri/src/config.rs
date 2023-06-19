@@ -30,7 +30,7 @@ impl Config {
 
         let json = serde_json::to_string_pretty(&self)?;
 
-        std::fs::create_dir_all(crate::path::get_config())?;
+        std::fs::create_dir_all(crate::path::get_app_folder())?;
         let mut file = OpenOptions::new()
             .create(true)
             .write(true)
@@ -42,7 +42,7 @@ impl Config {
     }
 
     pub fn get_path() -> PathBuf {
-        crate::path::get_config().join(FILENAME)
+        crate::path::get_app_folder().join(FILENAME)
     }
 
     pub fn load() -> anyhow::Result<Config> {

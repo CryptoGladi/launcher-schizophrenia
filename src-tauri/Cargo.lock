@@ -871,16 +871,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "fsio"
-version = "0.4.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dad0ce30be0cc441b325c5d705c8b613a0ca0d92b6a8953d41bd236dc09a36d0"
-dependencies = [
- "dunce",
- "rand 0.8.5",
-]
-
-[[package]]
 name = "futf"
 version = "0.1.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1681,7 +1671,6 @@ dependencies = [
  "log",
  "open 4.1.0",
  "reqwest",
- "run_script",
  "serde",
  "serde_json",
  "sevenz-rust",
@@ -2634,15 +2623,6 @@ dependencies = [
  "wasm-bindgen-futures",
  "web-sys",
  "windows 0.37.0",
-]
-
-[[package]]
-name = "run_script"
-version = "0.10.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "829f98fdc58d78989dd9af83be28bc15c94a7d77f9ecdb54abbbc0b1829ba9c7"
-dependencies = [
- "fsio",
 ]
 
 [[package]]

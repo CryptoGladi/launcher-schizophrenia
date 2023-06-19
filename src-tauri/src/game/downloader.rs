@@ -22,7 +22,7 @@ impl<'a> Checksum<'a> {
     }
 }
 
-pub const URL: &str = "https://s80vlx.storage.yandex.net/rdisk/97101d99791b78a5b7e4d5451d95f8d10ad42a6f2b9c32cb7a0ab5e42c5e1a45/648eead7/ebcgY3rvPKsNXoZfg1J4bWcoR8eCr1GwC2HiwemnhJnu936IH-HgYtxh8er7OhS0GAUGb3bTTLBtvGsf7Cgdwg==?uid=0&filename=minecra.7z&disposition=attachment&hash=ccmjnRHhAR8Dh18tCkeQX0GZNl0Xjin5yMnWf2A4UvIQ/AqL6mcvncq03KDH6RkUq/J6bpmRyOJonT3VoXnDag%3D%3D&limit=0&content_type=application%2Fx-7z-compressed&owner_uid=450618812&fsize=137049779&hid=b54a00c54b0ede2423cd28f37c630c71&media_type=compressed&tknv=v2&rtoken=7d676NJyAgJs&force_default=no&ycrid=na-0d51bd618f8edf0eb191ad5d13b6b2e2-downloader1f&ts=5fe65bedf23c0&s=f82a0a70638a12b2c34940441e31f37de944e8233c783754e98a873b01033580&pb=U2FsdGVkX19W_WPDAcTzvbCmv0RpiweJFfcWQjbbYJO8grI7tIqSIHYB4MZUYmQNei7GUq08Ld_6L_crWQHe3_QZjsNDZ8_9Hy_gctGC4mQ";
+pub const URL: &str = "https://s192sas.storage.yandex.net/rdisk/0dff56130643dec0c17e6d226d522d6b278b99bf79a8530d4754959dc43fc261/64907298/ebcgY3rvPKsNXoZfg1J4bZuI92VfJ_pUYfPAXkG5RaFtWSGJJxzB7c1NVIqi2IdPPcGA_7AoI7CX0n3eYa1-UA==?uid=0&filename=safd.7z&disposition=attachment&hash=c7LUdM7iz3Og4tnSCvPEeyJ8ALRk4qBXOvLSawL4PAT0dIttwoDDTYTYYQEN%2BYLkq/J6bpmRyOJonT3VoXnDag%3D%3D&limit=0&content_type=application%2Fx-7z-compressed&owner_uid=450618812&fsize=1066937373&hid=a4e9ad5f45208f7e2af31865c67e6e67&media_type=compressed&tknv=v2&rtoken=DUyQBCaK4m3Q&force_default=no&ycrid=na-674c6cd74fd5b58849d475522b9626ef-downloader10e&ts=5fe7d188fd600&s=5a24ba5d488e590a640dae50b48d9fb6d0cd55b73177592070a70afa46a6bebd&pb=U2FsdGVkX1-WMUF7i5b8dlNTeKySvtJ4jXlgkce-UGM22ov8IdbIWT8APzegz8ftAJhSzTFUUWpDuNP636AUafKD0F7vaQNxztY4XVotz2k";
 
 pub const CHECKSUM_FOR_ARCHIVE: Checksum = Checksum {
     hash: "1eb21cca15e2776a1d7c90bbe592ae840d4d91b0057788bce4e5b11723838dec",
@@ -59,7 +59,7 @@ impl<'a> Default for Downloader<'a> {
     fn default() -> Self {
         Self {
             url: URL.parse().unwrap(),
-            dest: crate::path::get_config(),
+            dest: crate::path::get_app_folder(),
             client: Client::new(),
             callback: Box::new(|_| {}),
         }

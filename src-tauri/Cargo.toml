@@ -25,7 +25,6 @@ dirs = "5"
 futures-util = "0.3"
 sevenz-rust = { version = "0.2", default-features = false }
 lazy_static = "1.4"
-run_script = "0.10"
 open = "4.1.0"
 
 [features]

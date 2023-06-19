@@ -1,5 +1,7 @@
-//! Главный модуль, который отвечает за запуск, настройку игры
+//! Главный модуль, который отвечает за запуск и настройку игры
 
+use std::path::PathBuf;
+use std::process::Command;
 use self::downloader::{Downloader, Progress};
 use bytesize::ByteSize;
 
@@ -7,12 +9,23 @@ pub mod command;
 mod downloader;
 mod flags;
 
+#[derive(Debug, Clone)]
+pub struct SPathBuf(PathBuf);
+
+impl ToString for SPathBuf {
+    fn to_string(&self) -> String {
+        self.0.clone().into_os_string().into_string().unwrap()
+    }
+}
+
 /// Главная структура для управления процессом игры
 #[derive(Debug)]
 pub struct GameManager {
     min_use_memory: ByteSize,
     max_use_memory: ByteSize,
     username: String,
+    path_to_minecraft: SPathBuf,
+    path_to_java: SPathBuf,
 }
 
 impl Default for GameManager {
@@ -21,6 +34,8 @@ impl Default for GameManager {
             min_use_memory: ByteSize::gib(1),
             max_use_memory: ByteSize::gib(4),
             username: "test_player".to_string(),
+            path_to_minecraft: SPathBuf(crate::path::get_app_folder()),
+            path_to_java: SPathBuf(crate::path::get_app_folder()), // TODO
         }
     }
 }
@@ -33,17 +48,18 @@ impl GameManager {
     /// Для успешного запуска нужно сперва установать игру
     pub fn run(&self) -> anyhow::Result<()> {
         let flags = flags::get_flags(self);
-        log::error!("flags: {}", flags);
+        log::error!("flags: {:?}", flags);
+        log::error!("flags size: {}", flags.len());
 
-        let args = vec![];
-        let options = run_script::ScriptOptions::new();
-        run_script::spawn(&flags, &args, &options)?;
+        let command = Command::new("/home/gladi/.tlauncher/mojang_jre/java-runtime-beta/linux/java-runtime-beta/bin/java").args(flags).output()?;
+        log::warn!("output: {:?}", command.stdout);
+        log::warn!("command: {:?}", command);
 
         Ok(())
     }
 
     pub fn is_installed(&self) -> anyhow::Result<bool> {
-        let path = crate::path::get_config().join("Шизофрения Ретёрн.jar");
+        let path = crate::path::get_app_folder().join("servers.dat");
 
         Ok(path.is_file())
     }
