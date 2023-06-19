@@ -1,9 +1,9 @@
 //! Главный модуль, который отвечает за запуск и настройку игры
 
-use std::path::PathBuf;
-use std::process::Command;
 use self::downloader::{Downloader, Progress};
 use bytesize::ByteSize;
+use std::path::PathBuf;
+use std::process::Command;
 
 pub mod command;
 mod downloader;
@@ -31,7 +31,7 @@ pub struct GameManager {
 impl Default for GameManager {
     fn default() -> Self {
         Self {
-            min_use_memory: ByteSize::gib(1),
+            min_use_memory: ByteSize::gib(3),
             max_use_memory: ByteSize::gib(4),
             username: "test_player".to_string(),
             path_to_minecraft: SPathBuf(crate::path::get_app_folder()),
@@ -51,7 +51,13 @@ impl GameManager {
         log::error!("flags: {:?}", flags);
         log::error!("flags size: {}", flags.len());
 
-        let command = Command::new("/home/gladi/.tlauncher/mojang_jre/java-runtime-beta/linux/java-runtime-beta/bin/java").args(flags).output()?;
+        let mut command = Command::new(
+            "/home/gladi/.tlauncher/mojang_jre/java-runtime-beta/linux/java-runtime-beta/bin/java",
+        )
+        .args(flags)
+        .current_dir(&self.path_to_minecraft.0)
+        .spawn()?;
+        command.wait()?;
         log::warn!("output: {:?}", command.stdout);
         log::warn!("command: {:?}", command);
 
