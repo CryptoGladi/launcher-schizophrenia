@@ -1,6 +1,7 @@
 //! Главный модуль, который отвечает за запуск и настройку игры
 
 use self::downloader::{Downloader, Progress};
+use self::java::JavaManager;
 use bytesize::ByteSize;
 use std::path::PathBuf;
 use std::process::Command;
@@ -26,7 +27,7 @@ pub struct GameManager {
     max_use_memory: ByteSize,
     username: String,
     path_to_minecraft: SPathBuf,
-    path_to_java: SPathBuf,
+    java: JavaManager,
 }
 
 impl Default for GameManager {
@@ -36,18 +37,8 @@ impl Default for GameManager {
             max_use_memory: ByteSize::gib(4),
             username: "test_player".to_string(),
             path_to_minecraft: SPathBuf(crate::path::get_app_folder()),
-            path_to_java: SPathBuf(
-                crate::path::get_app_folder()
-                    .join("tlauncher-libs")
-                    .join("mojang_jre")
-                    .join("java-runtime-beta")
-                    .join("linux")
-                    .join("java-runtime-beta")
-                    .join("bin")
-                    .join("java"),
-            ), // TODO добавить проверку OS, иначе будет пизда!!!
+            java: JavaManager {},
         }
-        // TODO Сделать чтобы файл java стал исполняемым в любом случае. Архивы не передают право на исполнения в Linux BUG
     }
 }
 
@@ -62,10 +53,11 @@ impl GameManager {
         log::error!("flags: {:?}", flags);
         log::error!("flags size: {}", flags.len());
 
-        let mut command = Command::new(self.path_to_java.0.clone())
+        let mut command = Command::new(self.java.get_exec())
             .args(flags)
             .current_dir(&self.path_to_minecraft.0)
             .spawn()?;
+
         command.wait()?;
         log::warn!("output: {:?}", command.stdout);
         log::warn!("command: {:?}", command);
@@ -87,6 +79,7 @@ impl GameManager {
 
         dowloader.set_callback(callback);
         dowloader.download().await?;
+        self.java.init();
 
         Ok(())
     }
