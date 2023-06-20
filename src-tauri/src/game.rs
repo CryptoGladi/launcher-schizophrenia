@@ -8,6 +8,7 @@ use std::process::Command;
 pub mod command;
 mod downloader;
 mod flags;
+mod java;
 
 #[derive(Debug, Clone)]
 pub struct SPathBuf(PathBuf);
@@ -35,8 +36,18 @@ impl Default for GameManager {
             max_use_memory: ByteSize::gib(4),
             username: "test_player".to_string(),
             path_to_minecraft: SPathBuf(crate::path::get_app_folder()),
-            path_to_java: SPathBuf(crate::path::get_app_folder()), // TODO
+            path_to_java: SPathBuf(
+                crate::path::get_app_folder()
+                    .join("tlauncher-libs")
+                    .join("mojang_jre")
+                    .join("java-runtime-beta")
+                    .join("linux")
+                    .join("java-runtime-beta")
+                    .join("bin")
+                    .join("java"),
+            ), // TODO добавить проверку OS, иначе будет пизда!!!
         }
+        // TODO Сделать чтобы файл java стал исполняемым в любом случае. Архивы не передают право на исполнения в Linux BUG
     }
 }
 
@@ -51,12 +62,10 @@ impl GameManager {
         log::error!("flags: {:?}", flags);
         log::error!("flags size: {}", flags.len());
 
-        let mut command = Command::new(
-            "/home/gladi/.tlauncher/mojang_jre/java-runtime-beta/linux/java-runtime-beta/bin/java",
-        )
-        .args(flags)
-        .current_dir(&self.path_to_minecraft.0)
-        .spawn()?;
+        let mut command = Command::new(self.path_to_java.0.clone())
+            .args(flags)
+            .current_dir(&self.path_to_minecraft.0)
+            .spawn()?;
         command.wait()?;
         log::warn!("output: {:?}", command.stdout);
         log::warn!("command: {:?}", command);
