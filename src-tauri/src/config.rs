@@ -1,3 +1,4 @@
+use bytesize::ByteSize;
 use serde::{Deserialize, Serialize};
 use std::{
     fs::{remove_file, OpenOptions},
@@ -7,17 +8,29 @@ use std::{
 
 pub mod command;
 
-const FILENAME: &str = "settings_launcher.json";
+const FILENAME: &str = "config_launcher.json";
+
+#[derive(Serialize, Deserialize)]
+#[serde(remote = "ByteSize")]
+pub struct ByteSizeDef(pub u64);
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Config {
     pub nickname: String,
+
+    #[serde(with = "ByteSizeDef")]
+    pub max_use_memory: ByteSize,
+
+    #[serde(with = "ByteSizeDef")]
+    pub min_use_memory: ByteSize,
 }
 
 impl Default for Config {
     fn default() -> Self {
         Self {
             nickname: "".to_string(),
+            max_use_memory: ByteSize::gb(4),
+            min_use_memory: ByteSize::gb(3),
         }
     }
 }

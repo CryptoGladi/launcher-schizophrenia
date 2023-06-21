@@ -1,3 +1,4 @@
+use crate::config::{self, Config};
 use crate::exit_unwrap::ExitUnwrap;
 use crate::game::downloader::Progress::*;
 use crate::game::GameManager;
@@ -22,9 +23,14 @@ pub async fn run_game(window: Window, nickname: String) {
         return;
     }
 
+    let config = Config::load().exit_unwrap();
+
     info!("running game: nickname: {}", nickname);
+
     let game = GameManager {
-        username: nickname,
+        nickname,
+        max_use_memory: config.max_use_memory,
+        min_use_memory: config.min_use_memory,
         ..Default::default()
     };
 

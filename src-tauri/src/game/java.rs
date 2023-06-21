@@ -7,14 +7,17 @@ use std::path::PathBuf;
 use std::os::unix::fs::PermissionsExt;
 
 macro_rules! impl_folder_name {
-    ($name:tt, $os:tt) => {
+    ($name:tt, $os:tt, $filename:tt) => {
         #[cfg(target_os = $os)]
         static FOLDER_NAME: &str = $name;
+
+        #[cfg(target_os = $os)]
+        static FILENAME: &str = $filename;
     };
 }
 
-impl_folder_name!("linux", "linux");
-impl_folder_name!("windows", "windows");
+impl_folder_name!("linux", "linux", "java");
+impl_folder_name!("windows", "windows", "java.exe");
 
 #[derive(Debug)]
 pub struct JavaManager {}
@@ -22,13 +25,10 @@ pub struct JavaManager {}
 impl JavaManager {
     pub fn get_exec(&self) -> PathBuf {
         crate::path::get_app_folder()
-            .join("tlauncher-libs")
-            .join("mojang_jre")
-            .join("java-runtime-beta")
-            .join(FOLDER_NAME)
-            .join("java-runtime-beta")
-            .join("bin")
             .join("java")
+            .join(FOLDER_NAME)
+            .join("bin")
+            .join(FILENAME)
     }
 
     pub fn init(&self) {

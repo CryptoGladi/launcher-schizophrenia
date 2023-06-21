@@ -25,7 +25,7 @@ impl ToString for SPathBuf {
 pub struct GameManager {
     min_use_memory: ByteSize,
     max_use_memory: ByteSize,
-    username: String,
+    nickname: String,
     path_to_minecraft: SPathBuf,
     java: JavaManager,
 }
@@ -35,7 +35,7 @@ impl Default for GameManager {
         Self {
             min_use_memory: ByteSize::gib(3),
             max_use_memory: ByteSize::gib(4),
-            username: "test_player".to_string(),
+            nickname: "test_player".to_string(),
             path_to_minecraft: SPathBuf(crate::path::get_app_folder()),
             java: JavaManager {},
         }
@@ -50,8 +50,7 @@ impl GameManager {
     /// Для успешного запуска нужно сперва установать игру
     pub fn run(&self) -> anyhow::Result<()> {
         let flags = flags::get_flags(self);
-        log::error!("flags: {:?}", flags);
-        log::error!("flags size: {}", flags.len());
+        log::info!("flags: {:?}", flags);
 
         let mut command = Command::new(self.java.get_exec())
             .args(flags)
@@ -59,8 +58,8 @@ impl GameManager {
             .spawn()?;
 
         command.wait()?;
-        log::warn!("output: {:?}", command.stdout);
-        log::warn!("command: {:?}", command);
+
+        log::info!("output: {:?}", command);
 
         Ok(())
     }

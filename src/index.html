@@ -35,14 +35,15 @@
       let button_progress_text = document.getElementById("button-progress-text");
       let input_nickname = document.getElementById("input-nickname");
       let button_start_game = document.getElementById("button-start-game");
-      // TODO Сделать отключение кнопки!
+      invoke("config_save_nickname", {nickname: input_nickname.value});
+
+
+      button_start_game.disabled = true;
 
       invoke("game_is_installed").then((is_installed) => {
-        console.log("lll: " + is_installed)
         if (is_installed == true) {
           console.log('starting game...')
           button_progress_text.innerHTML = "Играть"
-          invoke("config_save", {configForSave: {nickname: input_nickname.value}})
           invoke("run_game", {nickname: input_nickname.value})
         }
         else {
@@ -54,6 +55,7 @@
             button_progress_downloading.style.width = `0%`
             button_progress_decompressing.style.width = '0%'
             button_progress_text.innerHTML = "Играть"
+            button_start_game.disabled = false;
           })
 
           listen(
@@ -98,7 +100,7 @@
 
   <div style="float: left; margin-top: 123px; margin-left: 10px;">
     <input type="email" class="input-nord" id="input-nickname" placeholder="Ваш ник">
-    <p style="opacity: 0.65; color: rgb(212, 221, 229);">Версия 1.0</p>
+    <p style="opacity: 0.65; color: rgb(212, 221, 229);">Версия 1.0; Made by CryptoGladi</p>
   </div>
 
   <div style="float: right; margin-top: 140px; height: auto; width: 40px; margin-right: 10px;">

@@ -2,8 +2,10 @@ use super::Config;
 use crate::exit_unwrap::ExitUnwrap;
 
 #[tauri::command]
-pub fn config_save(config_for_save: Config) {
-    config_for_save.save().exit_unwrap();
+pub fn config_save_nickname(nickname: String) {
+    let mut config = Config::load().exit_unwrap();
+    config.nickname = nickname;
+    config.save().exit_unwrap();
 }
 
 #[tauri::command]

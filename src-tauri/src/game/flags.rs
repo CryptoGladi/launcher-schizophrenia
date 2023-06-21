@@ -55,7 +55,7 @@ pub fn get_flags(game: &GameManager) -> Vec<String> {
     flags.push("-Xss2M".to_string());
     flags.push("cpw.mods.bootstraplauncher.BootstrapLauncher".to_string());
     flags.push("--username".to_string());
-    flags.push(game.username.clone());
+    flags.push(game.nickname.clone());
     flags.push("--version".to_string());
     flags.push("ForgeOptiFine 1.18.2".to_string());
     flags.push("--gameDir".to_string());

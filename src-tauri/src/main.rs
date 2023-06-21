@@ -24,7 +24,7 @@ fn main() -> Result<()> {
             game::command::game_is_installed,
             game::command::install_game,
             config::command::config_load,
-            config::command::config_save,
+            config::command::config_save_nickname,
             command::open_url_discord
         ])
         .run(tauri::generate_context!())
