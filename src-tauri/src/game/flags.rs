@@ -1,6 +1,13 @@
 use super::GameManager;
 use crate::game::SPathBuf;
 
+#[allow(dead_code)]
+fn change_flags_for_windows(flags: &mut [String]) {
+    for flag in flags.iter_mut() {
+        *flag = flag.replace('/', "\\");
+    }
+}
+
 pub fn get_flags(game: &GameManager) -> Vec<String> {
     let mut flags = vec![];
 
@@ -91,5 +98,21 @@ pub fn get_flags(game: &GameManager) -> Vec<String> {
     flags.push("--fml.mcpVersion".to_string());
     flags.push("20220404.173914".to_string());
 
+    #[cfg(target_os = "windows")]
+    change_flags_for_windows(&mut flags);
+
     flags
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn change_flags() {
+        let mut flags = vec!["C:/test_folder/test_file.exe".to_string()];
+        change_flags_for_windows(&mut flags);
+
+        assert_eq!(flags, vec!["C:\\test_folder\\test_file.exe".to_string()]);
+    }
 }

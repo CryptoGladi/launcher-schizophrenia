@@ -26,6 +26,7 @@ futures-util = "0.3"
 sevenz-rust = { version = "0.2", default-features = false }
 lazy_static = "1.4"
 open = "4.1.0"
+discord-rpc-client = "0.3.0"
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem

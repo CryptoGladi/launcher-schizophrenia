@@ -37,9 +37,6 @@
       let button_start_game = document.getElementById("button-start-game");
       invoke("config_save_nickname", {nickname: input_nickname.value});
 
-
-      button_start_game.disabled = true;
-
       invoke("game_is_installed").then((is_installed) => {
         if (is_installed == true) {
           console.log('starting game...')
@@ -48,6 +45,7 @@
         }
         else {
           console.log('downloading game...')
+          button_start_game.disabled = true;
 
           status.style.opacity = 1;
           invoke("install_game").then(() => {

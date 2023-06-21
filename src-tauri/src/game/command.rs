@@ -1,4 +1,4 @@
-use crate::config::{self, Config};
+use crate::config::Config;
 use crate::exit_unwrap::ExitUnwrap;
 use crate::game::downloader::Progress::*;
 use crate::game::GameManager;

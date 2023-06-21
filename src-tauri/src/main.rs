@@ -8,6 +8,7 @@ mod game;
 pub mod path;
 
 use color_eyre::eyre::Result;
+use discord_rpc_client::Client;
 use log::*;
 
 fn main() -> Result<()> {
@@ -16,6 +17,13 @@ fn main() -> Result<()> {
         .with_level(LevelFilter::Debug)
         .init()
         .unwrap();
+
+    let mut drpc = Client::new(699666718410145795);
+    drpc.start();
+
+    // Set the activity
+    drpc.set_activity(|act| act.assets(|x| x.large_image("Minecraft")))
+        .expect("Failed to set activity");
     info!("running done!");
 
     tauri::Builder::default()
