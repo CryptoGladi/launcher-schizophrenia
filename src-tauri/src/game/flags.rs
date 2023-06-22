@@ -58,6 +58,9 @@ pub fn get_flags(game: &GameManager) -> Vec<String> {
     #[cfg(target_family = "windows")]
     flags.push(format!("{}/cpw/mods/bootstraplauncher/1.0.0/bootstraplauncher-1.0.0.jar;{}/cpw/mods/securejarhandler/1.0.8/securejarhandler-1.0.8.jar;{}/org/ow2/asm/asm-commons/9.5/asm-commons-9.5.jar;{}/org/ow2/asm/asm-util/9.5/asm-util-9.5.jar;{}/org/ow2/asm/asm-analysis/9.5/asm-analysis-9.5.jar;{}/org/ow2/asm/asm-tree/9.5/asm-tree-9.5.jar;{}/org/ow2/asm/asm/9.5/asm-9.5.jar;{}/net/minecraftforge/JarJarFileSystems/0.3.19/JarJarFileSystems-0.3.19.jar", p, p, p, p, p, p, p, p));
 
+    #[cfg(target_os = "windows")]
+    change_flags_for_windows(&mut flags);
+
     flags.push("--add-modules".to_string());
     flags.push("ALL-MODULE-PATH".to_string());
     flags.push("--add-opens".to_string());
@@ -107,9 +110,6 @@ pub fn get_flags(game: &GameManager) -> Vec<String> {
     flags.push("net.minecraftforge".to_string());
     flags.push("--fml.mcpVersion".to_string());
     flags.push("20220404.173914".to_string());
-
-    #[cfg(target_os = "windows")]
-    change_flags_for_windows(&mut flags);
 
     flags
 }

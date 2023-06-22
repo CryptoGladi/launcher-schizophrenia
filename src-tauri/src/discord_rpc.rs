@@ -1,5 +1,5 @@
-use std::time::{SystemTime, UNIX_EPOCH};
 use discord_rpc_client::Client;
+use std::time::{SystemTime, UNIX_EPOCH};
 use sysinfo::{System, SystemExt};
 
 const CLIENT_ID: u64 = 699666718410145795;
@@ -10,13 +10,11 @@ fn processes_found(name: &str) -> bool {
 }
 
 pub fn run() -> anyhow::Result<()> {
-    if processes_found("Discord") || processes_found("discord")
-    {
+    if processes_found("Discord") || processes_found("Discord.exe") {
         log::info!("discord found");
 
         let start = SystemTime::now();
-        let since_the_epoch = start
-            .duration_since(UNIX_EPOCH)?;
+        let since_the_epoch = start.duration_since(UNIX_EPOCH)?;
 
         let mut drpc = Client::new(CLIENT_ID);
 
@@ -29,10 +27,10 @@ pub fn run() -> anyhow::Result<()> {
         })?;
 
         log::info!("discord rpc client done!");
-    }
-    else {
+    } else {
         log::warn!("discord not found");
     }
 
     Ok(())
 }
+
