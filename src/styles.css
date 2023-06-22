@@ -48,3 +48,7 @@ body {
   color: rgb(222, 223, 225);
   border: rgb(61, 67, 77);
 }
+
+button.standard:disabled {
+    color: #666;
+}

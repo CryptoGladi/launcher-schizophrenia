@@ -3,27 +3,22 @@
 
 pub mod command;
 pub mod config;
+pub mod discord_rpc;
 pub mod exit_unwrap;
 mod game;
 pub mod path;
 
 use color_eyre::eyre::Result;
-use discord_rpc_client::Client;
 use log::*;
 
 fn main() -> Result<()> {
     color_eyre::install()?;
     simple_logger::SimpleLogger::default()
-        .with_level(LevelFilter::Debug)
+        .with_level(LevelFilter::Info)
         .init()
         .unwrap();
 
-    let mut drpc = Client::new(699666718410145795);
-    drpc.start();
-
-    // Set the activity
-    drpc.set_activity(|act| act.assets(|x| x.large_image("Minecraft")))
-        .expect("Failed to set activity");
+    std::thread::spawn(|| discord_rpc::run().unwrap());
     info!("running done!");
 
     tauri::Builder::default()

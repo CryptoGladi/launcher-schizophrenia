@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="ru">
 
 <head>
@@ -35,6 +36,7 @@
       let button_progress_text = document.getElementById("button-progress-text");
       let input_nickname = document.getElementById("input-nickname");
       let button_start_game = document.getElementById("button-start-game");
+
       invoke("config_save_nickname", {nickname: input_nickname.value});
 
       invoke("game_is_installed").then((is_installed) => {
@@ -45,7 +47,7 @@
         }
         else {
           console.log('downloading game...')
-          button_start_game.disabled = true;
+          button_start_game.onclick = "";
 
           status.style.opacity = 1;
           invoke("install_game").then(() => {
@@ -53,7 +55,7 @@
             button_progress_downloading.style.width = `0%`
             button_progress_decompressing.style.width = '0%'
             button_progress_text.innerHTML = "Играть"
-            button_start_game.disabled = false;
+            button_start_game.onclick = startGame;
           })
 
           listen(
@@ -101,7 +103,7 @@
     <p style="opacity: 0.65; color: rgb(212, 221, 229);">Версия 1.0; Made by CryptoGladi</p>
   </div>
 
-  <div style="float: right; margin-top: 140px; height: auto; width: 40px; margin-right: 10px;">
+  <div style="display: flex; float: right; margin-top: 140px; height: auto; width: 40px; margin-right: 10px;">
     <img src="assets/discord-icon.svg" style='height: 100%; width: 100%; object-fit: contain'
       onclick="invoke('open_url_discord')">
   </div>

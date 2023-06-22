@@ -58,7 +58,6 @@ impl GameManager {
             .spawn()?;
 
         command.wait()?;
-
         log::info!("output: {:?}", command);
 
         Ok(())
