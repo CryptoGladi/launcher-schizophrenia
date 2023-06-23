@@ -43,6 +43,21 @@
         if (is_installed == true) {
           console.log('starting game...')
           button_progress_text.innerHTML = "Играть"
+
+          listen('game-started',
+            ({event, payload}) => {
+              button_progress_text.innerHTML = "Запуск..."
+              button_start_game.onclick = "";
+            }
+          );
+
+          listen('game-ended',
+            ({event, payload}) => {
+              button_progress_text.innerHTML = "Играть"
+              button_start_game.onclick = startGame;
+            }
+          );
+
           invoke("run_game", {nickname: input_nickname.value})
         }
         else {

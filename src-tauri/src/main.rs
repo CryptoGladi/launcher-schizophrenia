@@ -6,6 +6,7 @@ pub mod config;
 pub mod discord_rpc;
 pub mod exit_unwrap;
 mod game;
+mod logger;
 pub mod path;
 
 use color_eyre::eyre::Result;
@@ -13,10 +14,12 @@ use log::*;
 
 fn main() -> Result<()> {
     color_eyre::install()?;
-    simple_logger::SimpleLogger::default()
-        .with_level(LevelFilter::Info)
-        .init()
-        .unwrap();
+
+    if !crate::path::get_app_folder().is_dir() {
+        std::fs::create_dir_all(crate::path::get_app_folder()).unwrap();
+    }
+
+    logger::init_logger().unwrap();
 
     std::thread::spawn(|| discord_rpc::run().unwrap());
     info!("running done!");

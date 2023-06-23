@@ -9,6 +9,8 @@ use tauri::Window;
 pub mod event {
     pub const PROGRESS_DOWLOADING: &str = "progress-downloading";
     pub const PROGRESS_DECOMPESSING: &str = "progress-decompressing";
+    pub const GAME_STARTED: &str = "game-started";
+    pub const GAME_ENDED: &str = "game-ended";
 }
 
 #[tauri::command]
@@ -27,6 +29,7 @@ pub async fn run_game(window: Window, nickname: String) {
 
     info!("running game: nickname: {}", nickname);
 
+    window.emit(event::GAME_STARTED, ()).exit_unwrap();
     let game = GameManager {
         nickname,
         max_use_memory: config.max_use_memory,
@@ -35,6 +38,7 @@ pub async fn run_game(window: Window, nickname: String) {
     };
 
     info!("{:?}", game.run());
+    window.emit(event::GAME_ENDED, ()).exit_unwrap();
 }
 
 #[tauri::command]
