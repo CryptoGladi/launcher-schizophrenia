@@ -6,10 +6,18 @@ use bytesize::ByteSize;
 use std::path::PathBuf;
 use std::process::{Command, Stdio};
 
+#[cfg(target_os = "windows")]
+use std::os::windows::process::CommandExt;
+
 pub mod command;
 mod downloader;
 mod flags;
 mod java;
+
+/// Нужен для убирания консоли в Windows
+/// https://stackoverflow.com/questions/60750113/how-do-i-hide-the-console-window-for-a-process-started-with-stdprocesscomman
+#[cfg(target_os = "windows")]
+const DETACHED_PROCESS: u32 = 0x00000008;
 
 #[derive(Debug, Clone)]
 pub struct SPathBuf(PathBuf);
@@ -52,11 +60,26 @@ impl GameManager {
         let flags = flags::get_flags(self);
         log::info!("flags: {:?}", flags);
 
-        let mut command = Command::new(self.java.get_exec())
-            .args(flags)
-            .current_dir(&self.path_to_minecraft.0)
-            .stdout(Stdio::piped())
-            .spawn()?;
+        let mut command = {
+            #[cfg(target_os = "linux")]
+            {
+                Command::new(self.java.get_exec())
+                    .args(flags)
+                    .current_dir(&self.path_to_minecraft.0)
+                    .stdout(Stdio::piped())
+                    .spawn()
+            }
+
+            #[cfg(target_os = "windows")]
+            {
+                Command::new(self.java.get_exec())
+                    .args(flags)
+                    .current_dir(&self.path_to_minecraft.0)
+                    .stdout(Stdio::piped())
+                    .creation_flags(DETACHED_PROCESS)
+                    .spawn()
+            }
+        }?;
 
         command.wait()?;
         log::info!("output command minecraft: {:?}", command);

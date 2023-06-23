@@ -31,7 +31,8 @@ fn main() -> Result<()> {
             game::command::install_game,
             config::command::config_load,
             config::command::config_save_nickname,
-            command::open_url_discord
+            command::open_url_discord,
+            command::get_total_memory,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
