@@ -9,7 +9,7 @@ fn processes_found(name: &str) -> bool {
     s.processes_by_exact_name(name).count() >= 1
 }
 
-pub fn run() -> anyhow::Result<()> {
+pub fn run() -> anyhow::Result<Option<Client>> {
     if processes_found("Discord") || processes_found("Discord.exe") {
         log::info!("discord found");
 
@@ -27,9 +27,10 @@ pub fn run() -> anyhow::Result<()> {
         })?;
 
         log::info!("discord rpc client done!");
+        return Ok(Some(drpc));
     } else {
         log::warn!("discord not found");
     }
 
-    Ok(())
+    Ok(None)
 }

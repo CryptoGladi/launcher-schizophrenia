@@ -4,7 +4,7 @@ use self::downloader::{Downloader, Progress};
 use self::java::JavaManager;
 use bytesize::ByteSize;
 use std::path::PathBuf;
-use std::process::Command;
+use std::process::{Command, Stdio};
 
 pub mod command;
 mod downloader;
@@ -55,10 +55,11 @@ impl GameManager {
         let mut command = Command::new(self.java.get_exec())
             .args(flags)
             .current_dir(&self.path_to_minecraft.0)
+            .stdout(Stdio::piped())
             .spawn()?;
 
         command.wait()?;
-        log::info!("output: {:?}", command);
+        log::info!("output command minecraft: {:?}", command);
 
         Ok(())
     }

@@ -20,8 +20,8 @@ fn main() -> Result<()> {
     }
 
     logger::init_logger().unwrap();
+    let _drpc = discord_rpc::run().unwrap();
 
-    std::thread::spawn(|| discord_rpc::run().unwrap());
     info!("running done!");
 
     tauri::Builder::default()
