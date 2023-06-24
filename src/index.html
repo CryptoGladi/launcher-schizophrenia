@@ -25,16 +25,15 @@
           button_progress_text.innerHTML = "Установить";
       })
 
-      invoke("config_load").then((config) => {
-        input_nickname.value = config.nickname;
+      invoke("get_total_memory").then((total_memory) => {
+        memory_range.setAttribute("max", total_memory);
       })
 
-      invoke("get_total_memory").then((total_memory) => {
-        console.log("memory: " + total_memory);
-        memory_range.setAttribute("max", total_memory);
+      invoke("config_load").then((config) => {
+        input_nickname.value = config.nickname;
 
         let num = document.getElementById("num");
-        memory_range.value = total_memory / 2;
+        memory_range.value = config.max_use_memory / 1048576;
         num.value = memory_range.value + "MB";
       })
     }
@@ -46,8 +45,10 @@
       let button_progress_text = document.getElementById("button-progress-text");
       let input_nickname = document.getElementById("input-nickname");
       let button_start_game = document.getElementById("button-start-game");
+      let memory_range = document.getElementById("memory_range");
 
       invoke("config_save_nickname", {nickname: input_nickname.value});
+      invoke("config_save_max_use_memory", {maxUseMemory: parseInt(memory_range.value)})
 
       invoke("game_is_installed").then((is_installed) => {
         if (is_installed == true) {
@@ -142,9 +143,14 @@
     <p style="opacity: 0.65; color: rgb(212, 221, 229);">Версия 1.0; Made by CryptoGladi</p>
   </div>
 
-  <div style="display: flex; float: right; margin-top: 140px; height: auto; width: 40px; margin-right: 10px;">
-    <img src="assets/discord-icon.svg" style='height: 100%; width: 100%; object-fit: contain'
+  <div
+    style="display: flex; justify-content: flex-end; float: right; margin-top: 140px; width: 40px; gap: 10px; margin-right: 10px;">
+    <img src="assets/discord-icon.svg" title="Открыть наш дискорд сервер" class="small-img"
       onclick="invoke('open_url_discord')">
+    <img src="assets/folder-icon.svg" title="Открыть папку с майкнрафтом" class="small-img"
+      onclick="invoke('open_folder_app')">
+    <img src="assets/git-repo-icon.svg" title="Открыть репозиторий" class="small-img"
+      onclick="invoke('open_url_repository')">
   </div>
 </body>
 

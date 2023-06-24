@@ -4,7 +4,7 @@ use self::downloader::{Downloader, Progress};
 use self::java::JavaManager;
 use bytesize::ByteSize;
 use std::path::PathBuf;
-use std::process::{Command, Stdio};
+use std::process::Command;
 
 #[cfg(target_os = "windows")]
 use std::os::windows::process::CommandExt;
@@ -66,7 +66,6 @@ impl GameManager {
                 Command::new(self.java.get_exec())
                     .args(flags)
                     .current_dir(&self.path_to_minecraft.0)
-                    .stdout(Stdio::piped())
                     .spawn()
             }
 
@@ -75,7 +74,6 @@ impl GameManager {
                 Command::new(self.java.get_exec())
                     .args(flags)
                     .current_dir(&self.path_to_minecraft.0)
-                    .stdout(Stdio::piped())
                     .creation_flags(DETACHED_PROCESS)
                     .spawn()
             }

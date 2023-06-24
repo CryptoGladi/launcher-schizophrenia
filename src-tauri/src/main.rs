@@ -20,7 +20,7 @@ fn main() -> Result<()> {
     }
 
     logger::init_logger().unwrap();
-    let _drpc = discord_rpc::run().unwrap();
+    let _drpc = std::thread::spawn(|| discord_rpc::run().unwrap());
 
     info!("running done!");
 
@@ -31,7 +31,10 @@ fn main() -> Result<()> {
             game::command::install_game,
             config::command::config_load,
             config::command::config_save_nickname,
+            config::command::config_save_max_use_memory,
             command::open_url_discord,
+            command::open_folder_app,
+            command::open_url_repository,
             command::get_total_memory,
         ])
         .run(tauri::generate_context!())

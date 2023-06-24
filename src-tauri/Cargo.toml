@@ -1,10 +1,10 @@
 [package]
 name = "launcher-schizophrenia"
 version = "0.1.0"
-description = "A Tauri App"
-authors = ["you"]
+description = "Лаунчер для Шизофрении Технотопии"
+authors = ["CryptoGladi <mymamchm@mail.ru>"]
 license = "MIT"
-repository = ""
+repository = "https://github.com/CryptoGladi/launcher-schizophrenia"
 edition = "2021"
 
 [build-dependencies]
@@ -18,16 +18,15 @@ log = "0.4"
 color-eyre = "0.6"
 bytesize = "1"
 reqwest = { version = "0.11", features = ["stream"] }
-chksum = { version = "0.1.0-rc5", default-features = false, features = ["sha2_256"] }
 anyhow = { version = "1", features = ["backtrace"] }
 dirs = "5"
 futures-util = "0.3"
 sevenz-rust = { version = "0.2", default-features = false }
-lazy_static = "1.4"
 open = "4.1.0"
 discord-rpc-client = "0.3.0"
 sysinfo = "0.29.2"
 log4rs = { version = "1.2", default-features = false, features = ["file_appender", "threshold_filter", "console_appender"] }
+remove_dir_all = { version = "0.8.2", features = ["parallel"] }
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem
@@ -45,6 +44,3 @@ codegen-units = 500
 
 [dev-dependencies]
 tokio = { version = "1.28.1", features = ["macros"] }
-
-[profile.dev.package."sevenz-rust"]
-opt-level = 3

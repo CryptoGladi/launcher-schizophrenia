@@ -37,7 +37,7 @@ pub async fn run_game(window: Window, nickname: String) {
         ..Default::default()
     };
 
-    info!("{:?}", game.run());
+    game.run().exit_unwrap();
     window.emit(event::GAME_ENDED, ()).exit_unwrap();
 }
 
