@@ -11,10 +11,11 @@ use std::{
 };
 
 #[cfg(target_os = "linux")]
-pub const URL: &str = "https://objects.githubusercontent.com/github-production-release-asset-2e65be/634833128/60223fb1-fc56-483d-8d80-1a52f7fa84c7?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIWNJYAX4CSVEH53A%2F20230625%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20230625T130930Z&X-Amz-Expires=300&X-Amz-Signature=74652522c7dd228fa5ae81d39498710827bb40c746f3074953c31a5fbed924a5&X-Amz-SignedHeaders=host&actor_id=116446344&key_id=0&repo_id=634833128&response-content-disposition=attachment%3B%20filename%3Dmine-linux.7z&response-content-type=application%2Foctet-stream";
+pub const URL: &str =
+    "https://github.com/CryptoGladi/launcher-schizophrenia/raw/master/mine-resource/mine-linux.7z";
 
 #[cfg(target_os = "windows")]
-pub const URL: &str = "https://objects.githubusercontent.com/github-production-release-asset-2e65be/634833128/cf7d99b9-79d5-47eb-b9dd-1c0f5427992b?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIWNJYAX4CSVEH53A%2F20230625%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20230625T130852Z&X-Amz-Expires=300&X-Amz-Signature=0dfe805308b1385a7fbc70ede3cfc840d9b03716196b9058d69e71729aea9a57&X-Amz-SignedHeaders=host&actor_id=116446344&key_id=0&repo_id=634833128&response-content-disposition=attachment%3B%20filename%3Dmine-windows.7z&response-content-type=application%2Foctet-stream";
+pub const URL: &str = "https://github.com/CryptoGladi/launcher-schizophrenia/raw/master/mine-resource/mine-windows.7z";
 
 #[derive(Clone, Debug, Serialize)]
 pub struct DecompressStream<'a> {
@@ -64,7 +65,7 @@ impl<'a> Downloader<'a> {
             remove_dir_all::remove_dir_contents(&self.dest)?;
         }
 
-        fs::create_dir(&self.dest)?;
+        //fs::create_dir(&self.dest)?;
 
         let len_files = sevenz_rust::Archive::read(&mut File::open(&archive_path)?, 1024, b"")
             .context("reading archive")?

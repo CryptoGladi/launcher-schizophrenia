@@ -34,8 +34,8 @@ impl JavaManager {
     pub fn init(&self) {
         #[cfg(target_os = "linux")]
         {
-            // https://stackoverflow.com/questions/28670683/how-are-permissions-applied-to-a-file-using-set-mode
-            fs::set_permissions(self.get_exec(), fs::Permissions::from_mode(0o655)).unwrap();
+            // https://askubuntu.com/questions/229589/how-to-make-a-file-e-g-a-sh-script-executable-so-it-can-be-run-from-a-termi
+            fs::set_permissions(self.get_exec(), fs::Permissions::from_mode(0o770)).unwrap();
         }
     }
 }

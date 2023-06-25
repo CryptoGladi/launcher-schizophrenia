@@ -59,6 +59,7 @@ impl GameManager {
         let flags = flags::get_flags(self);
         log::info!("flags: {:?}", flags);
 
+        self.java.init();
         *CHILD_PROCESS_GAME.lock().unwrap() = Some(
             Command::new(self.java.get_exec())
                 .args(flags)
@@ -84,7 +85,6 @@ impl GameManager {
 
         dowloader.set_callback(callback);
         dowloader.download().await?;
-        self.java.init();
 
         Ok(())
     }
