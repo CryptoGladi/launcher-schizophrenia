@@ -16,8 +16,8 @@ use log::info;
 fn main() -> Result<()> {
     color_eyre::install()?;
 
-    if !crate::path::get_app_folder().unwrap().is_dir() {
-        std::fs::create_dir_all(crate::path::get_app_folder().unwrap()).unwrap();
+    if !crate::path::get_app_folder().is_dir() {
+        std::fs::create_dir_all(crate::path::get_app_folder()).unwrap();
     }
 
     logger::init_logger().unwrap();

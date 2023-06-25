@@ -43,7 +43,7 @@ impl Default for GameManager {
             min_use_memory: ByteSize::gib(3),
             max_use_memory: ByteSize::gib(4),
             nickname: "test_player".to_string(),
-            path_to_minecraft: SPathBuf(crate::path::get_app_folder().unwrap()),
+            path_to_minecraft: SPathBuf(crate::path::get_app_folder()),
             java: JavaManager::default(),
         }
     }
@@ -71,7 +71,7 @@ impl GameManager {
     }
 
     pub fn is_installed() -> anyhow::Result<bool> {
-        let path = crate::path::get_app_folder()?.join("servers.dat");
+        let path = crate::path::get_app_folder().join("servers.dat");
 
         Ok(path.is_file())
     }

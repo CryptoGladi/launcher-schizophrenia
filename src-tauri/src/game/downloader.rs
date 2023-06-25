@@ -11,10 +11,10 @@ use std::{
 };
 
 #[cfg(target_os = "linux")]
-pub const URL: &str = "https://s124vlx.storage.yandex.net/rdisk/c97f325f59e4ddac92dd6f389df08c2946c7d6b83b927e5151f99d6999468b1c/64931305/ebcgY3rvPKsNXoZfg1J4bdnwl8Bp2Gr_FZnPIWNdE44oF6trNxc_gPKvDolHBUO_ok6pHJ48rvGoc24f_nLNyg==?uid=0&filename=gtrhgsdvsd.7z&disposition=attachment&hash=GmNiElPuRqCvk6%2B9E2vLzUMdNRgzAI41U3MlJiNiPUtsO5G6Na1zwcdioWxCzALhq/J6bpmRyOJonT3VoXnDag%3D%3D&limit=0&content_type=application%2Fx-7z-compressed&owner_uid=450618812&fsize=933524746&hid=78abe62232271b50d5166bd8d8e07a72&media_type=compressed&tknv=v2&rtoken=ebCWop2dN11H&force_default=no&ycrid=na-e7a7f4d350306e71426ef601fc49d024-downloader21f&ts=5fea52cf70b40&s=f7d8503229cbf03596edce9162f9c3729cbc037334807ab444f041067f87de21&pb=U2FsdGVkX18dUKutBkIyXlak9lUzQeAuG0y9Unfzo26cSNqzK26opjDyVN-o51Sh9NJYIaf2f6jIAv4AW-N0oaLEDLNFFBenXiB060OfkjM";
+pub const URL: &str = "https://objects.githubusercontent.com/github-production-release-asset-2e65be/634833128/60223fb1-fc56-483d-8d80-1a52f7fa84c7?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIWNJYAX4CSVEH53A%2F20230625%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20230625T130930Z&X-Amz-Expires=300&X-Amz-Signature=74652522c7dd228fa5ae81d39498710827bb40c746f3074953c31a5fbed924a5&X-Amz-SignedHeaders=host&actor_id=116446344&key_id=0&repo_id=634833128&response-content-disposition=attachment%3B%20filename%3Dmine-linux.7z&response-content-type=application%2Foctet-stream";
 
 #[cfg(target_os = "windows")]
-pub const URL: &str = "https://s118vlx.storage.yandex.net/rdisk/3c0c9eb53a96b7317a23dc85fee64f0954c59557abe37d04ffe10e210e622f3d/6495c9f6/ebcgY3rvPKsNXoZfg1J4baSu7RZ33l-N7worf_Zn6kXcHbPhJYg0wKuyx8lkxF7AJRD0r47jAKJFPMGzWTJjFQ==?uid=0&filename=windows.7z&disposition=attachment&hash=rvSOufaXK94E3ZY33UTM%2BIFJgkCWeEmPX50esHO%2BwEn4jzqTC4eBo%2BYrZpyZBTHCq/J6bpmRyOJonT3VoXnDag%3D%3D&limit=0&content_type=application%2Fx-7z-compressed&owner_uid=450618812&fsize=1007990517&hid=19d56e31331bcbc5de7efa6a2ce504fe&media_type=compressed&tknv=v2&rtoken=E2q1QoJZ4kw6&force_default=no&ycrid=na-bd2a14db706a321e6c4bd51b7edd57d4-downloader20f&ts=5fece98ede980&s=a19950780f8dd549c03de7c5d76f47a9cf57be168d43d3c955749f1e6a7187d6&pb=U2FsdGVkX1-P4-_FjQD0qplcUq3nvDP8DHpzTJjv2IPvnUTL9b8uUPNZH3IoGoU0ugQaJ8H84Zt8Ur5ZsGq4jHRjmmueWIUpeZtx9X_MS3Y";
+pub const URL: &str = "https://objects.githubusercontent.com/github-production-release-asset-2e65be/634833128/cf7d99b9-79d5-47eb-b9dd-1c0f5427992b?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIWNJYAX4CSVEH53A%2F20230625%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20230625T130852Z&X-Amz-Expires=300&X-Amz-Signature=0dfe805308b1385a7fbc70ede3cfc840d9b03716196b9058d69e71729aea9a57&X-Amz-SignedHeaders=host&actor_id=116446344&key_id=0&repo_id=634833128&response-content-disposition=attachment%3B%20filename%3Dmine-windows.7z&response-content-type=application%2Foctet-stream";
 
 #[derive(Clone, Debug, Serialize)]
 pub struct DecompressStream<'a> {
@@ -46,7 +46,7 @@ impl<'a> Default for Downloader<'a> {
     fn default() -> Self {
         Self {
             url: URL.parse().unwrap(),
-            dest: crate::path::get_app_folder().unwrap(),
+            dest: crate::path::get_app_folder(),
             client: Client::new(),
             callback: Box::new(|_| {}),
         }

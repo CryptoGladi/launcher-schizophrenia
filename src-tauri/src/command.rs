@@ -14,7 +14,7 @@ pub fn open_url_discord() {
 #[tauri::command]
 pub fn open_folder_app() {
     log::debug!("run open_folder_app");
-    open(crate::path::get_app_folder().exit_unwrap()).exit_unwrap();
+    open(crate::path::get_app_folder()).exit_unwrap();
 }
 
 #[tauri::command]

@@ -7,7 +7,7 @@
     "withGlobalTauri": true
   },
   "package": {
-    "productName": "launcher-schizophrenia",
+    "productName": "launcher-schizophreni",
     "version": "0.1.0"
   },
   "tauri": {
@@ -23,7 +23,8 @@
       "icon": [
         "icons/32x32.png",
         "icons/128x128.png",
-        "icons/128x128@2x.png"
+        "icons/128x128@2x.png",
+        "icons/icon.ico"
       ],
       "identifier": "com.launcher-schizophrenia.dev",
       "targets": "all"
@@ -38,7 +39,7 @@
       {
         "fullscreen": false,
         "resizable": false,
-        "title": "launcher-schizophrenia",
+        "title": "Шизофрения Технотопия",
         "width": 1000,
         "height": 600,
         "theme": "Dark",

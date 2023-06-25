@@ -25,7 +25,6 @@ pub struct JavaManager {}
 impl JavaManager {
     pub fn get_exec(&self) -> PathBuf {
         crate::path::get_app_folder()
-            .unwrap()
             .join("java")
             .join(FOLDER_NAME)
             .join("bin")
