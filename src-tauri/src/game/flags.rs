@@ -50,11 +50,11 @@ pub fn get_flags(game: &GameManager) -> Vec<String> {
         "-DmergeModules=jna-5.10.0.jar,jna-platform-5.10.0.jar,java-objc-bridge-1.0.0.jar"
             .to_string(),
     );
-    flags.push(format!("-DlibraryDirectory={}", p));
+    flags.push(format!("-DlibraryDirectory={p}"));
 
     flags.push("-p".to_string());
     #[cfg(target_family = "unix")]
-    flags.push(format!("{}/cpw/mods/bootstraplauncher/1.0.0/bootstraplauncher-1.0.0.jar:{}/cpw/mods/securejarhandler/1.0.8/securejarhandler-1.0.8.jar:{}/org/ow2/asm/asm-commons/9.5/asm-commons-9.5.jar:{}/org/ow2/asm/asm-util/9.5/asm-util-9.5.jar:{}/org/ow2/asm/asm-analysis/9.5/asm-analysis-9.5.jar:{}/org/ow2/asm/asm-tree/9.5/asm-tree-9.5.jar:{}/org/ow2/asm/asm/9.5/asm-9.5.jar:{}/net/minecraftforge/JarJarFileSystems/0.3.19/JarJarFileSystems-0.3.19.jar", p, p, p, p, p, p, p, p));
+    flags.push(format!("{p}/cpw/mods/bootstraplauncher/1.0.0/bootstraplauncher-1.0.0.jar:{p}/cpw/mods/securejarhandler/1.0.8/securejarhandler-1.0.8.jar:{p}/org/ow2/asm/asm-commons/9.5/asm-commons-9.5.jar:{p}/org/ow2/asm/asm-util/9.5/asm-util-9.5.jar:{p}/org/ow2/asm/asm-analysis/9.5/asm-analysis-9.5.jar:{p}/org/ow2/asm/asm-tree/9.5/asm-tree-9.5.jar:{p}/org/ow2/asm/asm/9.5/asm-9.5.jar:{p}/net/minecraftforge/JarJarFileSystems/0.3.19/JarJarFileSystems-0.3.19.jar"));
     #[cfg(target_family = "windows")]
     flags.push(format!("{}/cpw/mods/bootstraplauncher/1.0.0/bootstraplauncher-1.0.0.jar;{}/cpw/mods/securejarhandler/1.0.8/securejarhandler-1.0.8.jar;{}/org/ow2/asm/asm-commons/9.5/asm-commons-9.5.jar;{}/org/ow2/asm/asm-util/9.5/asm-util-9.5.jar;{}/org/ow2/asm/asm-analysis/9.5/asm-analysis-9.5.jar;{}/org/ow2/asm/asm-tree/9.5/asm-tree-9.5.jar;{}/org/ow2/asm/asm/9.5/asm-9.5.jar;{}/net/minecraftforge/JarJarFileSystems/0.3.19/JarJarFileSystems-0.3.19.jar", p, p, p, p, p, p, p, p));
 

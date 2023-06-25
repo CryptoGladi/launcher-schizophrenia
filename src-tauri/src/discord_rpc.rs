@@ -15,6 +15,7 @@ pub fn run() -> anyhow::Result<Option<Client>> {
 
         let start = SystemTime::now();
         let since_the_epoch = start.duration_since(UNIX_EPOCH)?;
+        let epoch = u64::try_from(since_the_epoch.as_millis())?;
 
         let mut drpc = Client::new(CLIENT_ID);
 
@@ -23,7 +24,7 @@ pub fn run() -> anyhow::Result<Option<Client>> {
             act.assets(|x| x.large_image("logo").large_text("Лольки топовые!"))
                 .instance(true)
                 .details("Лоли? Лоли!")
-                .timestamps(|x| x.start(since_the_epoch.as_millis() as u64))
+                .timestamps(|x| x.start(epoch))
         })?;
 
         log::info!("discord rpc client done!");

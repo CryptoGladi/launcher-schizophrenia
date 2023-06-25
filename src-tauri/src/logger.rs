@@ -13,7 +13,7 @@ const LEVEL: LevelFilter = LevelFilter::Info;
 const FILENAME: &str = "log-launcher.txt";
 
 pub fn init_logger() -> anyhow::Result<()> {
-    let file_path = crate::path::get_app_folder().join(FILENAME);
+    let file_path = crate::path::get_app_folder()?.join(FILENAME);
 
     // Build a stderr logger.
     let stderr = ConsoleAppender::builder().target(Target::Stderr).build();

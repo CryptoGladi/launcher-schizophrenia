@@ -46,7 +46,7 @@ impl<'a> Default for Downloader<'a> {
     fn default() -> Self {
         Self {
             url: URL.parse().unwrap(),
-            dest: crate::path::get_app_folder(),
+            dest: crate::path::get_app_folder().unwrap(),
             client: Client::new(),
             callback: Box::new(|_| {}),
         }

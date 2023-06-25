@@ -22,11 +22,12 @@ anyhow = { version = "1", features = ["backtrace"] }
 dirs = "5"
 futures-util = "0.3"
 sevenz-rust = { version = "0.2", default-features = false }
-open = "4.1.0"
-discord-rpc-client = "0.3.0"
-sysinfo = "0.29.2"
+open = "4.1"
+discord-rpc-client = "0.3"
+sysinfo = "0.29"
 log4rs = { version = "1.2", default-features = false, features = ["file_appender", "threshold_filter", "console_appender"] }
-remove_dir_all = { version = "0.8.2", features = ["parallel"] }
+remove_dir_all = { version = "0.8", features = ["parallel"] }
+lazy_static = "1.4"
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem

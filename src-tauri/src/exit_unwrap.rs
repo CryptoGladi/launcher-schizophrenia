@@ -13,7 +13,7 @@ impl<T, E: std::fmt::Debug> ExitUnwrap<T> for Result<T, E> {
     }
 }
 
-fn unwrap_failed(msg: &str, error: &dyn std::fmt::Debug) -> ! {
+pub fn unwrap_failed(msg: &str, error: &dyn std::fmt::Debug) -> ! {
     log::error!("{msg}: {error:?}");
     std::process::exit(1)
 }

@@ -54,7 +54,7 @@ impl Config {
     }
 
     pub fn get_path() -> PathBuf {
-        crate::path::get_app_folder().join(FILENAME)
+        crate::path::get_app_folder().unwrap().join(FILENAME)
     }
 
     pub fn load() -> anyhow::Result<Config> {

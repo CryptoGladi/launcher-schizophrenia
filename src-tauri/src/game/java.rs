@@ -19,12 +19,13 @@ macro_rules! impl_folder_name {
 impl_folder_name!("linux", "linux", "java");
 impl_folder_name!("windows", "windows", "java.exe");
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct JavaManager {}
 
 impl JavaManager {
     pub fn get_exec(&self) -> PathBuf {
         crate::path::get_app_folder()
+            .unwrap()
             .join("java")
             .join(FOLDER_NAME)
             .join("bin")
