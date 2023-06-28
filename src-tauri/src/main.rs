@@ -41,8 +41,10 @@ fn main() -> Result<()> {
         .on_window_event(|event| {
             if let tauri::WindowEvent::Destroyed = event.event() {
                 if let Some(child) = CHILD_PROCESS_GAME.lock().unwrap().as_mut() {
-                    log::warn!("killing process");
-                    child.kill().unwrap();
+                    match child.kill() {
+                        Ok(_) => log::warn!("successful killing process"),
+                        Err(_) => log::warn!("error killing process"),
+                    }
                 }
             }
         })

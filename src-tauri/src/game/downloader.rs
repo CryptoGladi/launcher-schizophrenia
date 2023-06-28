@@ -1,6 +1,7 @@
 use anyhow::Context;
 use futures_util::StreamExt;
-use reqwest::{Client, Url};
+use reqwest::cookie::Jar;
+use reqwest::{Client, ClientBuilder, Url};
 use serde::Serialize;
 use std::env::temp_dir;
 use std::{
@@ -10,12 +11,21 @@ use std::{
     path::PathBuf,
 };
 
+// https://stackoverflow.com/questions/25010369/wget-curl-large-file-from-google-drive
+
 #[cfg(target_os = "linux")]
-pub const URL: &str =
-    "https://github.com/CryptoGladi/launcher-schizophrenia/raw/master/mine-resource/mine-linux.7z";
+pub const URL: &str = r"https://drive.google.com/u/0/uc?id=16RqO23hPdP9vh0-jilKJdAYfvg-FaHMp&export=download&confirm=t&uuid=d62d3c0e-8ec5-4017-97d5-ef49bfe8806e&at=AKKF8vyEgM2Cs5XmGvC0GAhorm1o:1687948797802";
 
 #[cfg(target_os = "windows")]
-pub const URL: &str = "https://github.com/CryptoGladi/launcher-schizophrenia/raw/master/mine-resource/mine-windows.7z";
+pub const URL: &str = r"https://drive.google.com/u/0/uc?id=1AiEruVf_v1LnGZLMdFP0M3Lcy89N4kPr&export=download&confirm=t&uuid=f92a16c0-395f-4aae-a3eb-91a44cc834ec&at=AKKF8vz4XTZmu8ArZu5j1OMrjTx8:1687949189969";
+
+fn get_url() -> Result<String> {
+    #[cfg(target_os = "linux")]
+    {
+
+    }
+    todo!()
+}
 
 #[derive(Clone, Debug, Serialize)]
 pub struct DecompressStream<'a> {
@@ -48,7 +58,19 @@ impl<'a> Default for Downloader<'a> {
         Self {
             url: URL.parse().unwrap(),
             dest: crate::path::get_app_folder(),
-            client: Client::new(),
+            client: {
+                let cookie = "foo=bar; Domain=yolo.local";
+                let jar = Jar::default();
+
+                jar.add_cookie_str(cookie, &URL.parse().unwrap());
+
+                let client = ClientBuilder::new()
+                    .cookie_store(true)
+                    .cookie_provider(jar.into())
+                    .build()
+                    .unwrap();
+                client
+            },
             callback: Box::new(|_| {}),
         }
     }
