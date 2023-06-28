@@ -81,7 +81,7 @@ impl GameManager {
         &self,
         callback: impl FnMut(Progress) + Send + Sync + 'a,
     ) -> anyhow::Result<()> {
-        let mut dowloader = Downloader::default();
+        let mut dowloader = Downloader::new().await?;
 
         dowloader.set_callback(callback);
         dowloader.download().await?;

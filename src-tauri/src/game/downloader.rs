@@ -1,7 +1,6 @@
 use anyhow::Context;
 use futures_util::StreamExt;
-use reqwest::cookie::Jar;
-use reqwest::{Client, ClientBuilder, Url};
+use reqwest::{Client, Url};
 use serde::Serialize;
 use std::env::temp_dir;
 use std::{
@@ -12,19 +11,16 @@ use std::{
 };
 
 // https://stackoverflow.com/questions/25010369/wget-curl-large-file-from-google-drive
-
-#[cfg(target_os = "linux")]
-pub const URL: &str = r"https://drive.google.com/u/0/uc?id=16RqO23hPdP9vh0-jilKJdAYfvg-FaHMp&export=download&confirm=t&uuid=d62d3c0e-8ec5-4017-97d5-ef49bfe8806e&at=AKKF8vyEgM2Cs5XmGvC0GAhorm1o:1687948797802";
-
-#[cfg(target_os = "windows")]
-pub const URL: &str = r"https://drive.google.com/u/0/uc?id=1AiEruVf_v1LnGZLMdFP0M3Lcy89N4kPr&export=download&confirm=t&uuid=f92a16c0-395f-4aae-a3eb-91a44cc834ec&at=AKKF8vz4XTZmu8ArZu5j1OMrjTx8:1687949189969";
-
-fn get_url() -> Result<String> {
+async fn get_url() -> anyhow::Result<String> {
     #[cfg(target_os = "linux")]
     {
-
+        let url = reqwest::get("https://raw.githubusercontent.com/CryptoGladi/launcher-schizophrenia/master/url/linux.txt").await?.text().await?;
+        return Ok(url);
     }
-    todo!()
+    #[cfg(target_os = "windows")]{
+        let url = reqwest::get("https://raw.githubusercontent.com/CryptoGladi/launcher-schizophrenia/master/url/windows.txt").await?.text().await?;
+        return Ok(url);
+    }  
 }
 
 #[derive(Clone, Debug, Serialize)]
@@ -53,30 +49,16 @@ pub struct Downloader<'a> {
     callback: Box<dyn FnMut(Progress) + Send + Sync + 'a>,
 }
 
-impl<'a> Default for Downloader<'a> {
-    fn default() -> Self {
-        Self {
-            url: URL.parse().unwrap(),
-            dest: crate::path::get_app_folder(),
-            client: {
-                let cookie = "foo=bar; Domain=yolo.local";
-                let jar = Jar::default();
-
-                jar.add_cookie_str(cookie, &URL.parse().unwrap());
-
-                let client = ClientBuilder::new()
-                    .cookie_store(true)
-                    .cookie_provider(jar.into())
-                    .build()
-                    .unwrap();
-                client
-            },
-            callback: Box::new(|_| {}),
-        }
-    }
-}
-
 impl<'a> Downloader<'a> {
+    pub async fn new() -> anyhow::Result<Downloader<'a>> {
+        Ok(Self {
+            url: get_url().await?.parse()?,
+            dest: crate::path::get_app_folder(),
+            client: Client::default(),
+            callback: Box::new(|_| {}),
+        })
+    }
+
     pub async fn download(&mut self) -> anyhow::Result<()> {
         let (_, archive_path) = self
             .download_archive()
@@ -152,18 +134,5 @@ impl<'a> Downloader<'a> {
         }
 
         Ok((file, path))
-    }
-}
-
-#[cfg(test)]
-mod test {
-    use super::*;
-
-    #[tokio::test]
-    async fn check_url() {
-        let client = reqwest::Client::new();
-        let res = client.get(URL).send().await.unwrap();
-
-        assert_eq!(res.status().is_success(), true);
     }
 }
