@@ -2,7 +2,7 @@ use discord_rpc_client::Client;
 use std::time::{SystemTime, UNIX_EPOCH};
 use sysinfo::{System, SystemExt};
 
-const CLIENT_ID: u64 = 699666718410145795;
+const CLIENT_ID: u64 = 1124038568470388877;
 
 fn processes_found(name: &str) -> bool {
     let s = System::new_all();
@@ -21,9 +21,9 @@ pub fn run() -> anyhow::Result<Option<Client>> {
 
         drpc.start();
         drpc.set_activity(|act| {
-            act.assets(|x| x.large_image("logo").large_text("Лольки топовые!"))
+            act.assets(|x| x.large_image("icon").large_text("Майнкрафт - моя жизнь!"))
                 .instance(true)
-                .details("Лоли? Лоли!")
+                .details("Лучший сервер по майнкрафту!")
                 .timestamps(|x| x.start(epoch))
         })?;
 
